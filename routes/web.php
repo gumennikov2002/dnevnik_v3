@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\CabinetController;
+use App\Http\Controllers\CrudController;
+use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +19,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/dashboard', function () {
     return view('dashboard.index');
 });
+
+Route::get('users', [UsersController::class, 'index']);
+Route::get('cabinets', [CabinetController::class, 'index']);
+Route::post('cabinets/create', [CabinetController::class, 'create']);
+Route::post('users/create', [UsersController::class, 'create']);
+Route::post('users/delete', [UsersController::class, 'delete']);
+Route::post('cabinets/delete', [CabinetController::class, 'delete']);
