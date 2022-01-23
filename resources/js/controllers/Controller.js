@@ -43,7 +43,7 @@ function sidebarController() {
         sidebarContainer.innerHTML += `
             <li>
                 <a href="${menu[index].url}" class="nav-link py-3 border-bottom ${urlPathname == menu[index].url ? 'active' : ''}">
-                    <i class="fa fa-${menu[index].icon}"></i>
+                    <i class="gradient fa fa-${menu[index].icon}"></i>
                 </a>
             </li>
         `;

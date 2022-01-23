@@ -4,7 +4,7 @@
 @section('content')
 
 <div class="d-flex justify-content-between">
-    <div class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModel">Добавить</div>
+    <div class="btn btn-info text-light" data-bs-toggle="modal" data-bs-target="#myModel">Добавить</div>
     <input type="text" class="form-control" placeholder="Поиск" style="width: 200px">
 </div>
 
@@ -25,8 +25,8 @@
                         <td>{{ $row }}</td>
                     @endforeach
                     <td>
-                        <i class="fa fa-edit" style="cursor: pointer;"></i>
-                        <i class="fa fa-close rowDelete" style="margin-left: 10px; cursor: pointer;"></i>
+                        <i class="fa fa-edit gradient" style="cursor: pointer;"></i>
+                        <i class="fa fa-close rowDelete text-danger" style="margin-left: 10px; cursor: pointer;"></i>
                     </td>
                 </tr>
             @endforeach
@@ -67,7 +67,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" id="cleanModal">Очистить</button>
-                <button type="button" class="btn btn-primary" id="modalSaveBtn">Сохранить</button>
+                <button type="button" class="btn btn-info text-light" id="modalSaveBtn">Сохранить</button>
             </div>
         </div>
     </div>
