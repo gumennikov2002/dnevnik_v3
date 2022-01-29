@@ -4,11 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\Cabinet;
 use Illuminate\Http\Request;
+use stdClass;
 
-class CabinetController extends Controller
+class CabinetController extends CrudController
 {
-    public function index() {
-        $data = [
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->MODEL_NAME = 'App\Models\Cabinet';
+        $this->CONFIG = [
             'title' => 'Кабинеты',
             'page_title' => 'Кабинеты',
             'modal_title' => 'Добавить кабинет',
@@ -23,23 +28,8 @@ class CabinetController extends Controller
                 ]
             ]
         ];
-
-        return view('crud.index', $data);
-    }
-
-    function create(Request $request) {
-        $validatedFields = $request->validate([
+        $this->VALIDATE = [
             'num' => 'required'
-        ]);
- 
-        $cabinet = Cabinet::create($validatedFields);
-
-        if ($cabinet) {
-            return response(true);
-        }
-    }
-
-    public function delete(Request $request) {
-        Cabinet::destroy($request->input('id'));
+        ];
     }
 }

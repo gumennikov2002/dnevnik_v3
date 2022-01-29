@@ -6,10 +6,13 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
-class UsersController extends Controller
+class UsersController extends CrudController
 {
-    public function index() {
-        $data = [
+    public function __construct()
+    {
+        parent::__construct();
+        $this->MODEL_NAME = 'App\Models\User';
+        $this->CONFIG = [
             'title'        => 'Пользователи',
             'page_title'   => 'Пользователи',
             'modal_title'  => 'Добавить пользователя',
@@ -66,28 +69,13 @@ class UsersController extends Controller
                 ]
             ]
         ];
-
-        return view('crud.index', $data);
-    }
-
-    public function create(Request $request) {
-        $validatedFields = $request->validate([
+        $this->VALIDATE = [
             'full_name'       => 'required',
             'phone'           => 'required|integer',
             'date_of_birth'   => 'required',
             'role'            => 'required',
             'email'           => 'nullable',
             'additional_info' => 'nullable'
-        ]);
- 
-        $user = User::create($validatedFields);
-
-        if ($user) {
-            return response(true);
-        }
-    }
-
-    public function delete(Request $request) {
-        User::destroy($request->input('id'));
+        ];
     }
 }

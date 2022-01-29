@@ -4,7 +4,13 @@ const urlBase = window.location.origin;
 const urlPathname = window.location.pathname;
 axios.defaults.headers.post['X-CSRF-TOKEN'] = document.querySelector('input[name=_token]').value;
 
-urlPathname !== '/auth' ? sidebarController() : null;
+routeManager();
+
+function routeManager() {
+    urlPathname !== '/auth' ? sidebarController() : null;
+    urlPathname.split('_')[1] === 'crud' ? crudController() : null;
+}
+
 
 function sidebarController() {
     let sidebar = document.querySelector('#sidebar');
@@ -28,12 +34,12 @@ function sidebarController() {
             'roles': ['student']
         },
         'users': {
-            'url': '/users',
+            'url': '/users_crud',
             'icon': 'users',
             'roles': ['director', 'teacher']
         },
         'cabinets': {
-            'url': '/cabinets',
+            'url': '/cabinets_crud',
             'icon': 'columns',
             'roles': ['director', 'teacher']
         }
@@ -50,33 +56,42 @@ function sidebarController() {
     });
 }
 
-crudController();
 function crudController() {
     modalFields = JSON.parse(modalFields);
     let saveBtn = document.querySelector('#modalSaveBtn');
     let dataFields = {};
     let errorElement = document.querySelector('.errors');
     let cleanBtn = document.querySelector('#cleanModal');
-    let rowDelete = document.querySelectorAll('.rowDelete');
+    let modal = document.querySelector('#myModal');
     let closeModal = document.querySelector('#closeModal');
+    let openModal = document.querySelector('#openModal');
     let crudTable = document.querySelector('#crudTable');
 
+    //Кнопка "Очистить"
     cleanBtn.addEventListener('click', () => {
         cleanModal();
     });
 
+    //Кнопка "Сохранить"
     saveBtn.addEventListener('click', () => {
+        let url = null;
         Object.keys(modalFields).forEach((index, value) => {
             dataFields[index] = document.querySelector(`[name=${index}]`).value;
+            url = urlPathname + '/create';
+    console.log(modal.querySelector(`input[name='id']`));
+            if (modal.querySelector(`input[name='id']`)) {
+                url = urlPathname + '/update';
+                dataFields['id'] = modal.querySelector(`input[name='id']`).value;
+            }
         });
 
         hideErrors();
 
-        axios.post(urlPathname + '/create', dataFields)
-        .then(() => {
-            updateContent();
+        axios.post(url, dataFields)
+        .then((response) => {
             closeModal.click();
             cleanModal();
+            updateContent();
         })
         .catch((error) => {
             Object.keys(error.response.data.errors).forEach((index, value) => {
@@ -88,20 +103,56 @@ function crudController() {
         });
     });
 
-    rowDelete.forEach((elem) => {
-        elem.addEventListener('click', () => {
-            let rowId = elem.parentNode.parentNode.getAttribute('data-id');
+    //Отслеживание кликов динамических объектов
+    document.addEventListener('click', (e) => {
+        //Удалить запись
+        if (e.target && e.target.classList.contains('rowDelete')) {
+            let rowId = e.target.parentNode.parentNode.getAttribute('data-id');
             axios.post(urlPathname + '/delete', {'id': rowId});
-            elem.parentNode.removeChild;
-            elem.parentNode.parentNode.innerHTML = '';
-        });
+            e.target.parentNode.removeChild;
+            e.target.parentNode.parentNode.innerHTML = '';
+        }
+
+        //Получить данные записи в модалке
+        if (e.target && e.target.classList.contains('rowEdit')) {
+            let rowId = e.target.parentNode.parentNode.getAttribute('data-id');
+            axios.post(urlPathname + '/get_fields', {'id': rowId})
+            .then((response) => {
+                openModal.click();
+                let recordId = modal.querySelector(`input[name='id']`)
+                if (recordId) {
+                    recordId.parentNode.removeChild(recordId);
+                }
+
+                modal.querySelector('.modal-body').innerHTML += `<input type='text' name='id' value='${rowId}' class='hidden record-id'>`;
+                Object.keys(response.data).forEach((index) => {
+                    let fields = modal.querySelectorAll('.data-field');
+                    fields.forEach((e) => {
+                        if (e.tagName === 'INPUT' && e.getAttribute('name') === index) {
+                            e.value = response.data[index];
+                        }
+                        
+                        if (e.tagName === 'TEXTAREA' && e.getAttribute('name') === index) {
+                            e.innerHTML = response.data[index];
+                        }
+
+                        if (e.tagName === 'SELECT' && e.getAttribute('name') === index) {
+                            e.value = response.data[index];
+                        }
+                    });
+                });
+            });
+        }
     });
 
+
+    //Скрыть ошибки
     function hideErrors() {
         errorElement.innerHTML = '';
         errorElement.classList.add('hidden');
     }
 
+    //Очистить поля в модалке
     function cleanModal() {
         hideErrors();
         Object.keys(modalFields).forEach((index, value) => {
@@ -113,6 +164,7 @@ function crudController() {
         });
     }
 
+    //Обновить контент
     function updateContent() {
         axios.get(urlPathname)
         .then((response) => {

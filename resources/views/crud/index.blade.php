@@ -4,7 +4,7 @@
 @section('content')
 
 <div class="d-flex justify-content-between">
-    <div class="btn btn-info text-light" data-bs-toggle="modal" data-bs-target="#myModel">Добавить</div>
+    <div class="btn btn-info text-light" data-bs-toggle="modal" data-bs-target="#myModal" id="openModal">Добавить</div>
     <input type="text" class="form-control" placeholder="Поиск" style="width: 200px">
 </div>
 
@@ -25,7 +25,7 @@
                         <td>{{ $row }}</td>
                     @endforeach
                     <td>
-                        <i class="fa fa-edit gradient" style="cursor: pointer;"></i>
+                        <i class="fa fa-edit gradient rowEdit" style="cursor: pointer;"></i>
                         <i class="fa fa-close rowDelete text-danger" style="margin-left: 10px; cursor: pointer;"></i>
                     </td>
                 </tr>
@@ -37,7 +37,7 @@
     @endif
 </div>
 
-<div class="modal fade" id="myModel" tabindex="-1">
+<div class="modal fade" id="myModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -47,15 +47,15 @@
             <div class="modal-body">
                 @foreach($modal_fields as $field)
                     @if($field['field_type'] == 'input')
-                        <input type='{{ $field['type'] }}' name='{{ $field['name'] }}' class="form-control mb-2" placeholder='{{ $field['placeholder'] }}'>
+                        <input type='{{ $field['type'] }}' name='{{ $field['name'] }}' class="form-control mb-2 data-field" placeholder='{{ $field['placeholder'] }}'>
                     @endif
                     
                     @if($field['field_type'] == 'textarea')
-                        <textarea placeholder='{{ $field['placeholder'] }}' name='{{ $field['name'] }}' cols="30" rows="10" class="form-control mb-2"></textarea>
+                        <textarea placeholder='{{ $field['placeholder'] }}' name='{{ $field['name'] }}' cols="30" rows="10" class="data-field form-control mb-2"></textarea>
                     @endif
 
                     @if($field['field_type'] == 'select')
-                        <select class="form-select mb-2" name='{{ $field['name'] }}'>
+                        <select class="form-select mb-2 data-field" name='{{ $field['name'] }}'>
                             @foreach($field['options'] as $option)
                                 <option value='{{ $option['value'] }}'>{{ $option['label'] }}</option>
                             @endforeach

@@ -20,9 +20,14 @@ Route::get('/dashboard', function () {
     return view('dashboard.index');
 });
 
-Route::get('users', [UsersController::class, 'index']);
-Route::get('cabinets', [CabinetController::class, 'index']);
-Route::post('cabinets/create', [CabinetController::class, 'create']);
-Route::post('users/create', [UsersController::class, 'create']);
-Route::post('users/delete', [UsersController::class, 'delete']);
-Route::post('cabinets/delete', [CabinetController::class, 'delete']);
+Route::get('users_crud', [UsersController::class, 'index']);
+Route::post('users_crud/create', [UsersController::class, 'create']);
+Route::post('users_crud/delete', [UsersController::class, 'delete']);
+Route::post('users_crud/get_fields', [UsersController::class, 'get_fields']);
+Route::post('users_crud/update', [UsersController::class, 'update']);
+
+Route::get('cabinets_crud', [CabinetController::class, 'index']);
+Route::post('cabinets_crud/create', [CabinetController::class, 'create']);
+Route::post('cabinets_crud/delete', [CabinetController::class, 'delete']);
+Route::post('cabinets_crud/get_fields', [CabinetController::class, 'get_fields']);
+Route::post('cabinets_crud/update', [CabinetController::class, 'update']);
