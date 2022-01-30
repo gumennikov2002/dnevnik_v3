@@ -15,8 +15,13 @@ class CrudController extends Controller
 
     }
 
-    public function index() {
+    public function index(Request $request) {
         $data = $this->CONFIG;
+        $ids = explode(',', $request->get('ids'));
+        if ($request->get('ids')) {
+            $data['table_body'] = json_decode($this->MODEL_NAME::whereIn('id', $ids)->get());
+        }
+
         return view('crud.index', $data);
     }
 
@@ -49,6 +54,19 @@ class CrudController extends Controller
 
         if ($record) {
             return response($record);
+        }
+    }
+
+    public function search(Request $request) {
+        $record = $this->MODEL_NAME;
+        $search = [];
+
+        foreach (array_keys($this->CONFIG['modal_fields']) as $field) {
+            $search[$field] = $record::select('id')->where($field, 'like', '%'.$request->word.'%')->get();
+        }
+
+        if ($search) {
+            return response($search);
         }
     }
 }

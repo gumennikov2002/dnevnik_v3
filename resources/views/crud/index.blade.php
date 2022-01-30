@@ -5,7 +5,7 @@
 
 <div class="d-flex justify-content-between">
     <div class="btn btn-info text-light" data-bs-toggle="modal" data-bs-target="#myModal" id="openModal">Добавить</div>
-    <input type="text" class="form-control" placeholder="Поиск" style="width: 200px">
+    <input type="text" class="form-control" placeholder="Поиск" style="width: 200px" id="crudSearch">
 </div>
 
 <div class="col-md-12 table-responsive mt-2">

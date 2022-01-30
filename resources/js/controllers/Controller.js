@@ -66,6 +66,7 @@ function crudController() {
     let closeModal = document.querySelector('#closeModal');
     let openModal = document.querySelector('#openModal');
     let crudTable = document.querySelector('#crudTable');
+    let crudSearch = document.querySelector('#crudSearch');
 
     //Кнопка "Очистить"
     cleanBtn.addEventListener('click', () => {
@@ -145,6 +146,29 @@ function crudController() {
         }
     });
 
+    //Поиск по странице
+    crudSearch.addEventListener('keyup', () => {
+        let ids = [];
+        setTimeout(() => {}, 1500);
+        axios.post(urlPathname + '/search', {'word': crudSearch.value})
+        .then((response) => {
+            Object.keys(response.data).forEach((index) => {
+                if (response.data[index].length > 0) {
+                    let recordIds = response.data[index];
+                    Object.keys(recordIds).forEach((i) => {
+                        ids.push(recordIds[i].id);
+                    });
+                }
+            });
+
+            updateContent(ids);
+        });
+
+        if (crudSearch.value === '' || crudSearch.value === ' ') {
+            updateContent();
+        }
+
+    });
 
     //Скрыть ошибки
     function hideErrors() {
@@ -165,8 +189,8 @@ function crudController() {
     }
 
     //Обновить контент
-    function updateContent() {
-        axios.get(urlPathname)
+    function updateContent(search = null) {
+        axios.get(urlPathname + search ? '?ids=' + search : '')
         .then((response) => {
             let parser = new DOMParser().parseFromString(response.data, 'text/html');
             crudTable.querySelector('tbody').innerHTML = '';

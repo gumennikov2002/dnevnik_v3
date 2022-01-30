@@ -25,9 +25,11 @@ Route::post('users_crud/create', [UsersController::class, 'create']);
 Route::post('users_crud/delete', [UsersController::class, 'delete']);
 Route::post('users_crud/get_fields', [UsersController::class, 'get_fields']);
 Route::post('users_crud/update', [UsersController::class, 'update']);
+Route::post('users_crud/search', [UsersController::class, 'search']);
 
 Route::get('cabinets_crud', [CabinetController::class, 'index']);
 Route::post('cabinets_crud/create', [CabinetController::class, 'create']);
 Route::post('cabinets_crud/delete', [CabinetController::class, 'delete']);
 Route::post('cabinets_crud/get_fields', [CabinetController::class, 'get_fields']);
 Route::post('cabinets_crud/update', [CabinetController::class, 'update']);
+Route::post('cabinets_crud/search', [CabinetController::class, 'search']);
