@@ -23,7 +23,7 @@ class CrudController extends Controller
             $data['table_body'] = json_decode($this->MODEL_NAME::whereIn('id', $ids)->get());
         }
 
-        return view('crud.index', $data);
+        return view('crud.table', $data);
     }
 
     public function create(Request $request) {
