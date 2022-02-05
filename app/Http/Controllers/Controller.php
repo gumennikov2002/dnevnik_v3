@@ -18,6 +18,8 @@ class Controller extends BaseController
     public function __construct()
     {
         $this->USER_ID = session('session_user_id');
-        $this->USER_INFO = User::where('id', $this->USER_ID)->get()[0];
+        if ($this->USER_ID) {
+            $this->USER_INFO = User::where('id', $this->USER_ID)->get()[0];
+        }
     }
 }
