@@ -18,6 +18,7 @@ class CrudController extends Controller
     public function index(Request $request) {
         $data = $this->CONFIG;
         $ids = explode(',', $request->get('ids'));
+
         if ($request->get('ids')) {
             $data['table_body'] = json_decode($this->MODEL_NAME::whereIn('id', $ids)->get());
         }

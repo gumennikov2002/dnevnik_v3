@@ -13,9 +13,7 @@ function routeManager() {
 
 
 function sidebarController() {
-    let sidebar = document.querySelector('#sidebar');
-    let sidebarLogo = document.querySelector('#sidebarLogo');
-    let sidebarContainer = document.querySelector('#sidebarContainer');
+    const sidebarContainer = document.querySelector('#sidebarContainer');
 
     const menu = {
         'dashboard': {
@@ -45,7 +43,7 @@ function sidebarController() {
         }
     };
 
-    Object.keys(menu).forEach((index, value) => {
+    Object.keys(menu).forEach((index) => {
         sidebarContainer.innerHTML += `
             <li>
                 <a href="${menu[index].url}" class="nav-link py-3 border-bottom ${urlPathname == menu[index].url ? 'active' : ''}">
@@ -58,22 +56,22 @@ function sidebarController() {
 
 function crudController() {
     modalFields = JSON.parse(modalFields);
-    let saveBtn = document.querySelector('#modalSaveBtn');
-    let dataFields = {};
-    let errorElement = document.querySelector('.errors');
-    let cleanBtn = document.querySelector('#cleanModal');
-    let modal = document.querySelector('#myModal');
-    let closeModal = document.querySelector('#closeModal');
-    let openModal = document.querySelector('#openModal');
-    let crudTable = document.querySelector('#crudTable');
-    let crudSearch = document.querySelector('#crudSearch');
+    const saveBtn = document.querySelector('#modalSaveBtn');
+    const dataFields = {};
+    const errorElement = document.querySelector('.errors');
+    const cleanBtn = document.querySelector('#cleanModal');
+    const modal = document.querySelector('#myModal');
+    const closeModal = document.querySelector('#closeModal');
+    const openModal = document.querySelector('#openModal');
+    const crudTable = document.querySelector('#crudTable');
+    const crudSearch = document.querySelector('#crudSearch');
 
-    //Кнопка "Очистить"
+    /* Кнопка "Очистить" | Clean button */
     cleanBtn.addEventListener('click', () => {
         cleanModal();
     });
 
-    //Кнопка "Сохранить"
+    /* Кнопка "Сохранить" | Save button */
     saveBtn.addEventListener('click', () => {
         let url = null;
         Object.keys(modalFields).forEach((index, value) => {
@@ -88,13 +86,13 @@ function crudController() {
         hideErrors();
 
         axios.post(url, dataFields)
-        .then((response) => {
+        .then(() => {
             closeModal.click();
             cleanModal();
             updateContent();
         })
         .catch((error) => {
-            Object.keys(error.response.data.errors).forEach((index, value) => {
+            Object.keys(error.response.data.errors).forEach((index) => {
                 let errorInput = document.querySelector(`[name=${index}]`);
                 errorInput.style.border = '2px solid #f8d7da';
                 errorElement.classList.remove('hidden');
@@ -103,9 +101,9 @@ function crudController() {
         });
     });
 
-    //Отслеживание кликов динамических объектов
+    /* Отслеживание кликов динамических объектов | Dynamic objects click tracker */
     document.addEventListener('click', (e) => {
-        //Удалить запись
+        /* Удалить запись | Delete record */
         if (e.target && e.target.classList.contains('rowDelete')) {
             let rowId = e.target.parentNode.parentNode.getAttribute('data-id');
             axios.post(urlPathname + '/delete', {'id': rowId});
@@ -113,20 +111,20 @@ function crudController() {
             e.target.parentNode.parentNode.innerHTML = '';
         }
 
-        //Получить данные записи в модалке
+        /* Получить данные записи в модальном окне | Get record data in modal window */
         if (e.target && e.target.classList.contains('rowEdit')) {
             let rowId = e.target.parentNode.parentNode.getAttribute('data-id');
             axios.post(urlPathname + '/get_fields', {'id': rowId})
             .then((response) => {
                 openModal.click();
-                let recordId = modal.querySelector(`input[name='id']`)
+                const recordId = modal.querySelector(`input[name='id']`)
                 if (recordId) {
                     recordId.parentNode.removeChild(recordId);
                 }
 
                 modal.querySelector('.modal-body').innerHTML += `<input type='text' name='id' value='${rowId}' class='hidden record-id'>`;
                 Object.keys(response.data).forEach((index) => {
-                    let fields = modal.querySelectorAll('.data-field');
+                    const fields = modal.querySelectorAll('.data-field');
                     fields.forEach((e) => {
                         if (e.tagName === 'INPUT' && e.getAttribute('name') === index) {
                             e.value = response.data[index];
@@ -145,7 +143,7 @@ function crudController() {
         }
     });
 
-    //Поиск по странице
+    /* Поиск по странице | Page search */
     crudSearch.addEventListener('keyup', () => {
         let ids = [];
         setTimeout(() => {}, 1500);
@@ -169,25 +167,26 @@ function crudController() {
 
     });
 
-    //Скрыть ошибки
+    /* Скрыть ошибки | Hide errors */
     function hideErrors() {
         errorElement.innerHTML = '';
         errorElement.classList.add('hidden');
     }
 
-    //Очистить поля в модалке
+    /* Очистить поля в модальном окне | Clean modal fields */
     function cleanModal() {
         hideErrors();
-        Object.keys(modalFields).forEach((index, value) => {
-            document.querySelector(`[name=${index}]`).value = '';
+        Object.keys(modalFields).forEach((index) => {
+            const field = document.querySelector(`[name=${index}]`);
+            field.value = '';
 
-            if (document.querySelector(`[name=${index}]`).tagName == 'SELECT') {
-                document.querySelector(`[name=${index}]`).options[0].selected = true;
+            if (field.tagName == 'SELECT') {
+                field.options[0].selected = true;
             }
         });
     }
 
-    //Обновить контент
+    /* Обновить контент | Update content */
     function updateContent(search = null) {
         let urlConfig = urlPathname;
         if (search !== null) {
@@ -200,9 +199,6 @@ function crudController() {
             Object.values(parser.querySelectorAll('#crudTable tbody tr')).forEach((elem) => {
                 crudTable.querySelector('tbody').append(elem);
             });
-        })
-        .catch(() => {
-            console.log('error');
         });
     }
 }
