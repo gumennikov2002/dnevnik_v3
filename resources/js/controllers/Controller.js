@@ -79,7 +79,6 @@ function crudController() {
         Object.keys(modalFields).forEach((index, value) => {
             dataFields[index] = document.querySelector(`[name=${index}]`).value;
             url = urlPathname + '/create';
-    console.log(modal.querySelector(`input[name='id']`));
             if (modal.querySelector(`input[name='id']`)) {
                 url = urlPathname + '/update';
                 dataFields['id'] = modal.querySelector(`input[name='id']`).value;
@@ -190,7 +189,11 @@ function crudController() {
 
     //Обновить контент
     function updateContent(search = null) {
-        axios.get(urlPathname + search ? '?ids=' + search : '')
+        let urlConfig = urlPathname;
+        if (search !== null) {
+            urlConfig += '?ids=' + search;
+        }
+        axios.get(urlConfig)
         .then((response) => {
             let parser = new DOMParser().parseFromString(response.data, 'text/html');
             crudTable.querySelector('tbody').innerHTML = '';
