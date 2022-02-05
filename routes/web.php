@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CabinetController;
 use App\Http\Controllers\CrudController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SidebarController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +22,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::post('auth/check', [AuthController::class, 'check']);
+Route::post('sidebar/load', [SidebarController::class, 'load']);
 
 Route::group(['middleware' => 'AuthCheck'], function() {
     Route::get('auth', [AuthController::class, 'index']);
