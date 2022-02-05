@@ -7,10 +7,66 @@ axios.defaults.headers.post['X-CSRF-TOKEN'] = document.querySelector('input[name
 routeManager();
 
 function routeManager() {
-    urlPathname !== '/auth' ? sidebarController() : null;
+    urlPathname !== '/auth' ? sidebarController() : authController();
     urlPathname.split('_')[1] === 'crud' ? crudController() : null;
 }
 
+function authController() {
+    const form = document.querySelector('#auth');
+    const password = form.querySelector(`input[name='password']`);
+    const button = form.querySelector(`button[name='save']`);
+    const textError = form.querySelector('.text-danger');
+    let phone = form.querySelector(`input[name='phone']`);
+
+    let checkFields = {
+        'phone': 0,
+        'password': 0
+    };
+
+    function disableEnableButton(action) {
+        if (action === 'disable') {
+            button.removeAttribute('disabled');
+            button.classList.remove('btn-secondary');
+            button.classList.add('btn-primary');
+        } if (action === 'enable') {
+            button.setAttribute('disabled', true);
+            button.classList.remove('btn-primary');
+            button.classList.add('btn-secondary');
+        }
+    }
+    
+    phone.addEventListener('keyup', () => {
+        phone.value !== '' ? checkFields.phone = 1 : checkFields.phone = 0;
+        checkFields.phone !== 0 && checkFields.password !== 0 ? disableEnableButton('disable') : disableEnableButton('enable');
+        textError.innerHTML = '';
+    });
+
+    password.addEventListener('keyup', () => {
+        password.value !== '' ? checkFields.password = 1 : checkFields.password = 0;
+        checkFields.phone !== 0 && checkFields.password !== 0 ? disableEnableButton('disable') : disableEnableButton('enable');
+        textError.innerHTML = '';
+    });
+
+
+    button.addEventListener('click', () => {
+        if (phone.value.indexOf('+') !== -1) {
+            phone.value = phone.value.replace(/[^0-9]/g, '');
+        }
+
+        const data = {
+            'phone': phone.value,
+            'password': password.value
+        }
+
+        axios.post(urlPathname + '/check', data)
+        .then(() => {
+            window.location.href = urlBase + '/profile';
+        })
+        .catch(() => {
+            textError.append('Неверный логин или пароль');
+        });
+    });
+}
 
 function sidebarController() {
     const sidebarContainer = document.querySelector('#sidebarContainer');
