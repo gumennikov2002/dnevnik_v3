@@ -26,12 +26,8 @@ function authController() {
     function disableEnableButton(action) {
         if (action === 'disable') {
             button.removeAttribute('disabled');
-            button.classList.remove('btn-secondary');
-            button.classList.add('btn-primary');
         } if (action === 'enable') {
             button.setAttribute('disabled', true);
-            button.classList.remove('btn-primary');
-            button.classList.add('btn-secondary');
         }
     }
     

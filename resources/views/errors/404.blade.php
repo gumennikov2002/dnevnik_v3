@@ -45,7 +45,7 @@
 
 
         body {
-            background: linear-gradient(90deg, rgba(0,184,148,1) 0%, rgba(0,212,255,1) 100%);
+            background: linear-gradient(90deg, rgba(75, 64, 170, 1) 0%, rgba(195, 0, 255, 1) 100%);
         }
 
         .window {

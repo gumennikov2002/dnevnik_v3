@@ -42,3 +42,101 @@
 }
 
 .spacer {margin-top: 70px;}
+
+#authPage {
+    background: url('../../public/images/bg-register-img.jpg') no-repeat;
+    background-size: cover;
+}
+
+#authPage .window {
+    border-radius: 10px;
+    padding: 20px 50px;
+    height: 500px;
+    background: linear-gradient(90deg, rgba(75, 64, 170, 0.5) 0%, rgba(195, 0, 255, 0.5) 100%);
+    box-shadow: 0px 4px 8px 0px rgba(34, 60, 80, 0.2);
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+    z-index: 999;
+}
+
+.logo-auth {
+    width: 120px;
+    height: 120px;
+    background: #fff;
+    padding: 30px;
+    border-radius: 50%;
+    object-fit: contain;
+}
+
+.form-control-custom {
+    background: none;
+    border: none;
+    border-bottom: 2px solid #fff;
+    color: #fff;
+}
+
+.form-control-custom::placeholder, .form-control-custom:focus {
+    color: #fff;
+}
+
+.form-control-custom:focus {
+    background: none;
+}
+
+#authPage .window .btn-secondary {
+    background: none;
+    border: 2px solid #fff;
+}
+
+#authPage .window .text-danger {
+    color: #fbb !important;
+}
+
+img.snow {
+    width: 450px;
+    height: 400px;
+    margin-left: -60px;
+    margin-top: -210px;
+    position: absolute;
+}
+
+
+@media screen and (max-width: 1400px) {
+    img.snow {
+        width: 396px;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    img.snow {
+        width: 334px;
+        height: 300px;
+        margin-top: -160px;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    img.snow {
+        width: 496px;
+        height: 400px;
+        margin-top: -210px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    img.snow {
+        width: 466px;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    img.snow {
+        display: none;
+    }
+
+    #authPage .window {
+        top: 0;
+        position: absolute;
+        height: 100%;
+    }
+}
