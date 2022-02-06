@@ -66,11 +66,28 @@ function authController() {
 
 function sidebarController() {
     const sidebarContainer = document.querySelector('#sidebarContainer');
+    const menuHTML = document.querySelector('#menu');
+    const openMenu = document.querySelector('#openMenu');
+    const closeMenu = document.querySelector('#closeMenu');
+
+    openMenu.addEventListener('click', () => {
+        menuHTML.classList.remove('hidden');
+        menuHTML.classList.remove('fadeOutMenu');
+        menuHTML.classList.add('fadeInMenu');
+    });
+
+    closeMenu.addEventListener('click', () => {
+        menuHTML.classList.remove('fadeInMenu');
+        menuHTML.classList.add('fadeOutMenu');
+        menuHTML.classList.add('hidden');
+    });
+
 
     axios.post(urlBase + '/sidebar/load')
     .then((response) => {
         const menu = response.data.menu;
         const profile = response.data.profile;
+
 
         Object.keys(menu).forEach((index) => {
             sidebarContainer.innerHTML += `

@@ -4,3 +4,38 @@
     </a>
     <ul class="nav nav-pills nav-flush flex-column mb-auto text-center" id="sidebarContainer"></ul>
 </div>
+
+<div id="menu" class="z-top hidden">
+    <h2>Меню</h2>
+    <i class="fa fa-close" id="closeMenu"></i>
+    <ul class="text-center mt-5">
+        <li><a href="#">Пользователи</a></li> 
+        <li><a href="#">Кабинеты</a></li> 
+        <li><a href="#">Расписание</a></li>
+        <li><a href="#">Профиль</a></li>
+    </ul>
+</div>
+
+<div id="bottom-sidebar" class="bg-light light-shadow">
+    <div class="d-flex justify-content-between">
+        <i class="fa fa-bars gradient" id="openMenu"></i>
+        <div class="items">
+            <a href="#"><i class="fa fa-user gradient"></i></a>
+            <a href="#"><i class="fa fa-users gradient"></i></a>
+            <a href="#"><i class="fa fa-columns gradient"></i></a>
+        </div>
+        <div class="profile-menu">
+            <div class="dropdown">
+                <a href="#" class="d-flex mt-1 align-items-center justify-content-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser3" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="images/default.png" alt="mdo" width="32" height="32" class="rounded-circle" id="profile-pic">
+                </a>
+                <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser3">
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item" href="/profile/logout">Выйти</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
