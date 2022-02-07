@@ -1,7 +1,8 @@
 const { default: axios } = require("axios");
 
-const urlBase = window.location.origin;
+const urlBase     = window.location.origin;
 const urlPathname = window.location.pathname;
+
 axios.defaults.headers.post['X-CSRF-TOKEN'] = document.querySelector('input[name=_token]').value;
 
 routeManager();
@@ -12,10 +13,11 @@ function routeManager() {
 }
 
 function authController() {
-    const form = document.querySelector('#auth');
-    const password = form.querySelector(`input[name='password']`);
-    const button = form.querySelector(`button[name='save']`);
+    const form      = document.querySelector('#auth');
+    const password  = form.querySelector(`input[name='password']`);
+    const button    = form.querySelector(`button[name='save']`);
     const textError = form.querySelector('.text-danger');
+
     let phone = form.querySelector(`input[name='phone']`);
 
     let checkFields = {
@@ -26,7 +28,9 @@ function authController() {
     function disableEnableButton(action) {
         if (action === 'disable') {
             button.removeAttribute('disabled');
-        } if (action === 'enable') {
+        } 
+
+        if (action === 'enable') {
             button.setAttribute('disabled', true);
         }
     }
@@ -66,9 +70,9 @@ function authController() {
 
 function sidebarController() {
     const sidebarContainer = document.querySelector('#sidebarContainer');
-    const menuHTML = document.querySelector('#menu');
-    const openMenu = document.querySelector('#openMenu');
-    const closeMenu = document.querySelector('#closeMenu');
+    const menuHTML         = document.querySelector('#menu');
+    const openMenu         = document.querySelector('#openMenu');
+    const closeMenu        = document.querySelector('#closeMenu');
 
     openMenu.addEventListener('click', () => {
         menuHTML.classList.remove('hidden');
@@ -85,7 +89,7 @@ function sidebarController() {
 
     axios.post(urlBase + '/sidebar/load')
     .then((response) => {
-        const menu = response.data.menu;
+        const menu    = response.data.menu;
         const profile = response.data.profile;
 
 
@@ -115,7 +119,7 @@ function sidebarController() {
 
         Object.keys(profile.profile_menu).forEach((index, value) => {
             const dropdownMenu = document.querySelector('.dropdown-menu');
-            const menu = profile.profile_menu;
+            const menu         = profile.profile_menu;
 
             dropdownMenu.insertAdjacentHTML('afterbegin', `<li><a class="dropdown-item" href="${menu[index].link}">${menu[index].title}</a></li>`);
         });
@@ -124,27 +128,37 @@ function sidebarController() {
 
 function crudController() {
     modalFields = JSON.parse(modalFields);
-    const saveBtn = document.querySelector('#modalSaveBtn');
-    const dataFields = {};
+    const saveBtn      = document.querySelector('#modalSaveBtn');
+    const dataFields   = {};
     const errorElement = document.querySelector('.errors');
-    const cleanBtn = document.querySelector('#cleanModal');
-    const modal = document.querySelector('#myModal');
-    const closeModal = document.querySelector('#closeModal');
-    const openModal = document.querySelector('#openModal');
-    const crudTable = document.querySelector('#crudTable');
-    const crudSearch = document.querySelector('#crudSearch');
+    const cleanBtn     = document.querySelector('#cleanModal');
+    const modal        = document.querySelector('#myModal');
+    const closeModal   = document.querySelector('#closeModal');
+    const openModal    = document.querySelector('#openModal');
+    const editModal    = document.querySelector('#editModal');
+    const crudTable    = document.querySelector('#crudTable');
+    const crudSearch   = document.querySelector('#crudSearch');
+    const modaTitle    = document.querySelector('.modal-title');
 
     /* Кнопка "Очистить" | Clean button */
     cleanBtn.addEventListener('click', () => {
         cleanModal();
     });
 
+    /* При нажатии кнопки "Добавить" очищает данные полей | Clean modal fields if button has been pressed */
+    openModal.addEventListener('click', () => {
+        cleanModal();
+        modaTitle.innerHTML = 'Добавить запись';
+    });
+
     /* Кнопка "Сохранить" | Save button */
     saveBtn.addEventListener('click', () => {
         let url = null;
+
         Object.keys(modalFields).forEach((index, value) => {
             dataFields[index] = document.querySelector(`[name=${index}]`).value;
             url = urlPathname + '/create';
+
             if (modal.querySelector(`input[name='id']`)) {
                 url = urlPathname + '/update';
                 dataFields['id'] = modal.querySelector(`input[name='id']`).value;
@@ -174,6 +188,7 @@ function crudController() {
         /* Удалить запись | Delete record */
         if (e.target && e.target.classList.contains('rowDelete')) {
             let rowId = e.target.parentNode.parentNode.getAttribute('data-id');
+
             axios.post(urlPathname + '/delete', {'id': rowId});
             e.target.parentNode.removeChild;
             e.target.parentNode.parentNode.innerHTML = '';
@@ -182,9 +197,11 @@ function crudController() {
         /* Получить данные записи в модальном окне | Get record data in modal window */
         if (e.target && e.target.classList.contains('rowEdit')) {
             let rowId = e.target.parentNode.parentNode.getAttribute('data-id');
+
             axios.post(urlPathname + '/get_fields', {'id': rowId})
             .then((response) => {
-                openModal.click();
+                editModal.click();
+                modaTitle.innerHTML = 'Изменить запись';
                 const recordId = modal.querySelector(`input[name='id']`)
                 if (recordId) {
                     recordId.parentNode.removeChild(recordId);
@@ -193,6 +210,7 @@ function crudController() {
                 modal.querySelector('.modal-body').innerHTML += `<input type='text' name='id' value='${rowId}' class='hidden record-id'>`;
                 Object.keys(response.data).forEach((index) => {
                     const fields = modal.querySelectorAll('.data-field');
+
                     fields.forEach((e) => {
                         if (e.tagName === 'INPUT' && e.getAttribute('name') === index) {
                             e.value = response.data[index];
@@ -215,6 +233,7 @@ function crudController() {
     crudSearch.addEventListener('keyup', () => {
         let ids = [];
         setTimeout(() => {}, 1500);
+
         axios.post(urlPathname + '/search', {'word': crudSearch.value})
         .then((response) => {
             Object.keys(response.data).forEach((index) => {
@@ -257,9 +276,11 @@ function crudController() {
     /* Обновить контент | Update content */
     function updateContent(search = null) {
         let urlConfig = urlPathname;
+
         if (search !== null) {
             urlConfig += '?ids=' + search;
         }
+
         axios.get(urlConfig)
         .then((response) => {
             let parser = new DOMParser().parseFromString(response.data, 'text/html');

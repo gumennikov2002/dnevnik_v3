@@ -5,6 +5,7 @@
 
 <div class="d-flex justify-content-between">
     <div class="btn btn-info text-light" data-bs-toggle="modal" data-bs-target="#myModal" id="openModal">Добавить</div>
+    <div class="btn btn-info text-light hidden" data-bs-toggle="modal" data-bs-target="#myModal" id="editModal"></div>
     <input type="text" class="form-control" placeholder="Поиск" style="width: 200px" id="crudSearch">
 </div>
 
@@ -41,7 +42,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">{{ $modal_title }}</h5>
+                <h5 class="modal-title"></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="closeModal"></button>
             </div>
             <div class="modal-body">

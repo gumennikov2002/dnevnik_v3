@@ -13,7 +13,6 @@ class UsersController extends CrudController
         $this->CONFIG = [
             'title'        => 'Пользователи',
             'page_title'   => 'Пользователи',
-            'modal_title'  => 'Добавить пользователя',
             'table_heads'  => ['#', 'ФИО', 'Телефон', 'Эл. почта', 'Дата рождения', 'Доп. инфо', 'Тип'],
             'table_body'   => json_decode(User::all()),
             'modal_fields' => [
