@@ -15,7 +15,6 @@
     background: linear-gradient(90deg, rgba(75, 64, 170, 0.5) 0%, rgba(195, 0, 255, 0.5) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    display: table;
 }
 
 .blue-gradient {
@@ -195,10 +194,19 @@ img.snow {
     position: absolute;
 }
 
+@media screen and (max-width: 1500px) {
+    .top-bar h2 {
+        margin-left: 60px;
+    }
+}
 
 @media screen and (max-width: 1400px) {
     img.snow {
         width: 396px;
+    }
+
+    .top-bar h2 {
+        margin-left: 0;
     }
 }
 
