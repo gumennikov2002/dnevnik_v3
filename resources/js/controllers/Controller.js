@@ -97,25 +97,11 @@ function sidebarController() {
             sidebarContainer.innerHTML += `
                 <li>
                     <a href="${menu[index].url}" class="nav-link py-3 border-bottom ${urlPathname == menu[index].url ? 'active' : ''}">
-                        <i class="gradient fa fa-${menu[index].icon}"></i>
+                        <i class="blue-gradient fa fa-${menu[index].icon}"></i>
                     </a>
                 </li>
             `;
         });
-
-        sidebarContainer.parentNode.innerHTML += `
-            <div class="dropdown border-top">
-                <a href="#" class="d-flex align-items-center justify-content-center p-3 link-dark text-decoration-none dropdown-toggle" id="dropdownUser3" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="${profile.profile_pic}" alt="mdo" width="24" height="24" class="rounded-circle" id="profile-pic">
-                </a>
-                <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser3">
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-                    <li><a class="dropdown-item" href="/profile/logout">Выйти</a></li>
-                </ul>
-            </div>
-        `;
 
         Object.keys(profile.profile_menu).forEach((index, value) => {
             const dropdownMenu = document.querySelector('.dropdown-menu');
@@ -123,6 +109,8 @@ function sidebarController() {
 
             dropdownMenu.insertAdjacentHTML('afterbegin', `<li><a class="dropdown-item" href="${menu[index].link}">${menu[index].title}</a></li>`);
         });
+
+        document.querySelector('#profile-pic').setAttribute('src', profile.profile_pic);
     });
 }
 
