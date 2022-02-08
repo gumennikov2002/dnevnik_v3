@@ -20,10 +20,7 @@
     <h2>Меню</h2>
     <i class="fa fa-close" id="closeMenu"></i>
     <ul class="text-center mt-5">
-        <li><a href="#">Пользователи</a></li>
-        <li><a href="#">Кабинеты</a></li>
-        <li><a href="#">Расписание</a></li>
-        <li><a href="#">Профиль</a></li>
+
     </ul>
 </div>
 
@@ -31,9 +28,7 @@
     <div class="d-flex justify-content-between">
         <i class="fa fa-bars gradient" id="openMenu"></i>
         <div class="items">
-            <a href="#"><i class="fa fa-user gradient"></i></a>
-            <a href="#"><i class="fa fa-users gradient"></i></a>
-            <a href="#"><i class="fa fa-columns gradient"></i></a>
+
         </div>
         <div class="profile-menu">
             <div class="dropdown">

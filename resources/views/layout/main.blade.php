@@ -26,7 +26,7 @@
 
                 <div class="spacer"></div>
 
-                <div class="container">
+                <div class="container pb-5">
                     @yield('content')
                 </div>
             </div>

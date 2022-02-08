@@ -1,57 +1,57 @@
-const { default: axios } = require("axios");
+const { default: axios } = require("axios")
 
-const urlBase     = window.location.origin;
-const urlPathname = window.location.pathname;
+const urlBase     = window.location.origin
+const urlPathname = window.location.pathname
 
-axios.defaults.headers.post['X-CSRF-TOKEN'] = document.querySelector('input[name=_token]').value;
+axios.defaults.headers.post['X-CSRF-TOKEN'] = document.querySelector('input[name=_token]').value
 
-routeManager();
+routeManager()
 
 function routeManager() {
-    urlPathname !== '/auth'    ? sidebarController() : authController();
-    urlPathname === '/profile' ? profileController() : null;
-    urlPathname.split('_')[1] === 'crud' ? crudController() : null;
+    urlPathname !== '/auth'    ? sidebarController() : authController()
+    urlPathname === '/profile' ? profileController() : null
+    urlPathname.split('_')[1] === 'crud' ? crudController() : null
 }
 
 function authController() {
-    const form      = document.querySelector('#auth');
-    const password  = form.querySelector(`input[name='password']`);
-    const button    = form.querySelector(`button[name='save']`);
-    const textError = form.querySelector('.text-danger');
+    const form      = document.querySelector('#auth')
+    const password  = form.querySelector(`input[name='password']`)
+    const button    = form.querySelector(`button[name='save']`)
+    const textError = form.querySelector('.text-danger')
 
-    let phone = form.querySelector(`input[name='phone']`);
+    let phone = form.querySelector(`input[name='phone']`)
 
     let checkFields = {
         'phone': 0,
         'password': 0
-    };
+    }
 
     function disableEnableButton(action) {
         if (action === 'disable') {
-            button.removeAttribute('disabled');
+            button.removeAttribute('disabled')
         } 
 
         if (action === 'enable') {
-            button.setAttribute('disabled', true);
+            button.setAttribute('disabled', true)
         }
     }
     
     phone.addEventListener('keyup', () => {
-        phone.value !== '' ? checkFields.phone = 1 : checkFields.phone = 0;
-        checkFields.phone !== 0 && checkFields.password !== 0 ? disableEnableButton('disable') : disableEnableButton('enable');
-        textError.innerHTML = '';
-    });
+        phone.value !== '' ? checkFields.phone = 1 : checkFields.phone = 0
+        checkFields.phone !== 0 && checkFields.password !== 0 ? disableEnableButton('disable') : disableEnableButton('enable')
+        textError.innerHTML = ''
+    })
 
     password.addEventListener('keyup', () => {
-        password.value !== '' ? checkFields.password = 1 : checkFields.password = 0;
-        checkFields.phone !== 0 && checkFields.password !== 0 ? disableEnableButton('disable') : disableEnableButton('enable');
-        textError.innerHTML = '';
-    });
+        password.value !== '' ? checkFields.password = 1 : checkFields.password = 0
+        checkFields.phone !== 0 && checkFields.password !== 0 ? disableEnableButton('disable') : disableEnableButton('enable')
+        textError.innerHTML = ''
+    })
 
 
     button.addEventListener('click', () => {
         if (phone.value.indexOf('+') !== -1) {
-            phone.value = phone.value.replace(/[^0-9]/g, '');
+            phone.value = phone.value.replace(/[^0-9]/g, '')
         }
 
         const data = {
@@ -61,37 +61,38 @@ function authController() {
 
         axios.post(urlPathname + '/check', data)
         .then(() => {
-            window.location.href = urlBase + '/profile';
+            window.location.href = urlBase + '/profile'
         })
         .catch(() => {
-            textError.append('Неверный логин или пароль');
-        });
-    });
+            textError.append('Неверный логин или пароль')
+        })
+    })
 }
 
 function sidebarController() {
-    const sidebarContainer = document.querySelector('#sidebarContainer');
-    const menuHTML         = document.querySelector('#menu');
-    const openMenu         = document.querySelector('#openMenu');
-    const closeMenu        = document.querySelector('#closeMenu');
+    const sidebarContainer       = document.querySelector('#sidebarContainer')
+    const bottomSidebarContainer = document.querySelector('#bottom-sidebar')
+    const mobileMenu             = document.querySelector('#menu')
+    const openMenu               = document.querySelector('#openMenu')
+    const closeMenu              = document.querySelector('#closeMenu')
 
     openMenu.addEventListener('click', () => {
-        menuHTML.classList.remove('hidden');
-        menuHTML.classList.remove('fadeOutMenu');
-        menuHTML.classList.add('fadeInMenu');
-    });
+        mobileMenu.classList.remove('hidden')
+        mobileMenu.classList.remove('fadeOutMenu')
+        mobileMenu.classList.add('fadeInMenu')
+    })
 
     closeMenu.addEventListener('click', () => {
-        menuHTML.classList.remove('fadeInMenu');
-        menuHTML.classList.add('fadeOutMenu');
-        menuHTML.classList.add('hidden');
-    });
+        mobileMenu.classList.remove('fadeInMenu')
+        mobileMenu.classList.add('fadeOutMenu')
+        mobileMenu.classList.add('hidden')
+    })
 
 
     axios.post(urlBase + '/sidebar/load')
     .then((response) => {
-        const menu    = response.data.menu;
-        const profile = response.data.profile;
+        const menu    = response.data.menu
+        const profile = response.data.profile
 
 
         Object.keys(menu).forEach((index) => {
@@ -101,196 +102,204 @@ function sidebarController() {
                         <i class="blue-gradient fa fa-${menu[index].icon}"></i>
                     </a>
                 </li>
-            `;
-        });
+            `
+
+            bottomSidebarContainer.querySelector('.items').innerHTML += `
+                <a href="${menu[index].url}"><i class="fa fa-${menu[index].icon} gradient"></i></a>
+            `
+
+            mobileMenu.querySelector('ul').innerHTML += `
+                <li><a href="${menu[index].url}">${menu[index].title}</a></li>
+            `
+        })
 
         Object.keys(profile.profile_menu).forEach((index, value) => {
-            const dropdownMenu = document.querySelector('.dropdown-menu');
-            const menu         = profile.profile_menu;
+            const dropdownMenu = document.querySelector('.dropdown-menu')
+            const menu         = profile.profile_menu
 
-            dropdownMenu.insertAdjacentHTML('afterbegin', `<li><a class="dropdown-item" href="${menu[index].link}">${menu[index].title}</a></li>`);
-        });
+            dropdownMenu.insertAdjacentHTML('afterbegin', `<li><a class="dropdown-item" href="${menu[index].link}">${menu[index].title}</a></li>`)
+        })
 
-        document.querySelector('#profile-pic').setAttribute('src', profile.profile_pic);
-    });
+        document.querySelector('#profile-pic').setAttribute('src', profile.profile_pic)
+    })
 }
 
 function crudController() {
-    modalFields = JSON.parse(modalFields);
-    const saveBtn      = document.querySelector('#modalSaveBtn');
-    const dataFields   = {};
-    const errorElement = document.querySelector('.errors');
-    const cleanBtn     = document.querySelector('#cleanModal');
-    const modal        = document.querySelector('#myModal');
-    const closeModal   = document.querySelector('#closeModal');
-    const openModal    = document.querySelector('#openModal');
-    const editModal    = document.querySelector('#editModal');
-    const crudTable    = document.querySelector('#crudTable');
-    const crudSearch   = document.querySelector('#crudSearch');
-    const modaTitle    = document.querySelector('.modal-title');
+    modalFields = JSON.parse(modalFields)
+    const saveBtn      = document.querySelector('#modalSaveBtn')
+    const dataFields   = {}
+    const errorElement = document.querySelector('.errors')
+    const cleanBtn     = document.querySelector('#cleanModal')
+    const modal        = document.querySelector('#myModal')
+    const closeModal   = document.querySelector('#closeModal')
+    const openModal    = document.querySelector('#openModal')
+    const editModal    = document.querySelector('#editModal')
+    const crudTable    = document.querySelector('#crudTable')
+    const crudSearch   = document.querySelector('#crudSearch')
+    const modaTitle    = document.querySelector('.modal-title')
 
     /* Кнопка "Очистить" | Clean button */
     cleanBtn.addEventListener('click', () => {
-        cleanModal();
-    });
+        cleanModal()
+    })
 
     /* При нажатии кнопки "Добавить" очищает данные полей | Clean modal fields if button has been pressed */
     openModal.addEventListener('click', () => {
-        cleanModal();
-        modaTitle.innerHTML = 'Добавить запись';
-    });
+        cleanModal()
+        modaTitle.innerHTML = 'Добавить запись'
+    })
 
     /* Кнопка "Сохранить" | Save button */
     saveBtn.addEventListener('click', () => {
-        let url = null;
+        let url = null
 
         Object.keys(modalFields).forEach((index, value) => {
-            dataFields[index] = document.querySelector(`[name=${index}]`).value;
-            url = urlPathname + '/create';
+            dataFields[index] = document.querySelector(`[name=${index}]`).value
+            url = urlPathname + '/create'
 
             if (modal.querySelector(`input[name='id']`)) {
-                url = urlPathname + '/update';
-                dataFields['id'] = modal.querySelector(`input[name='id']`).value;
+                url = urlPathname + '/update'
+                dataFields['id'] = modal.querySelector(`input[name='id']`).value
             }
-        });
+        })
 
-        hideErrors();
+        hideErrors()
 
         axios.post(url, dataFields)
         .then(() => {
-            closeModal.click();
-            cleanModal();
-            updateContent();
+            closeModal.click()
+            cleanModal()
+            updateContent()
         })
         .catch((error) => {
             Object.keys(error.response.data.errors).forEach((index) => {
-                let errorInput = document.querySelector(`[name=${index}]`);
-                errorInput.style.border = '2px solid #f8d7da';
-                errorElement.classList.remove('hidden');
-                errorElement.innerHTML += `<span>${error.response.data.errors[index]}</span> <br>`;
-            });
-        });
-    });
+                let errorInput = document.querySelector(`[name=${index}]`)
+                errorInput.style.border = '2px solid #f8d7da'
+                errorElement.classList.remove('hidden')
+                errorElement.innerHTML += `<span>${error.response.data.errors[index]}</span> <br>`
+            })
+        })
+    })
 
     /* Отслеживание кликов динамических объектов | Dynamic objects click tracker */
     document.addEventListener('click', (e) => {
         /* Удалить запись | Delete record */
         if (e.target && e.target.classList.contains('rowDelete')) {
-            let rowId = e.target.parentNode.parentNode.getAttribute('data-id');
+            let rowId = e.target.parentNode.parentNode.getAttribute('data-id')
 
-            axios.post(urlPathname + '/delete', {'id': rowId});
-            e.target.parentNode.removeChild;
-            e.target.parentNode.parentNode.innerHTML = '';
+            axios.post(urlPathname + '/delete', {'id': rowId})
+            e.target.parentNode.removeChild
+            e.target.parentNode.parentNode.innerHTML = ''
         }
 
         /* Получить данные записи в модальном окне | Get record data in modal window */
         if (e.target && e.target.classList.contains('rowEdit')) {
-            let rowId = e.target.parentNode.parentNode.getAttribute('data-id');
+            let rowId = e.target.parentNode.parentNode.getAttribute('data-id')
 
             axios.post(urlPathname + '/get_fields', {'id': rowId})
             .then((response) => {
-                editModal.click();
-                modaTitle.innerHTML = 'Изменить запись';
+                editModal.click()
+                modaTitle.innerHTML = 'Изменить запись'
                 const recordId = modal.querySelector(`input[name='id']`)
                 if (recordId) {
-                    recordId.parentNode.removeChild(recordId);
+                    recordId.parentNode.removeChild(recordId)
                 }
 
-                modal.querySelector('.modal-body').innerHTML += `<input type='text' name='id' value='${rowId}' class='hidden record-id'>`;
+                modal.querySelector('.modal-body').innerHTML += `<input type='text' name='id' value='${rowId}' class='hidden record-id'>`
                 Object.keys(response.data).forEach((index) => {
-                    const fields = modal.querySelectorAll('.data-field');
+                    const fields = modal.querySelectorAll('.data-field')
 
                     fields.forEach((e) => {
                         if (e.tagName === 'INPUT' && e.getAttribute('name') === index) {
-                            e.value = response.data[index];
+                            e.value = response.data[index]
                         }
                         
                         if (e.tagName === 'TEXTAREA' && e.getAttribute('name') === index) {
-                            e.innerHTML = response.data[index];
+                            e.innerHTML = response.data[index]
                         }
 
                         if (e.tagName === 'SELECT' && e.getAttribute('name') === index) {
-                            e.value = response.data[index];
+                            e.value = response.data[index]
                         }
-                    });
-                });
-            });
+                    })
+                })
+            })
         }
-    });
+    })
 
     /* Поиск по странице | Page search */
     crudSearch.addEventListener('keyup', () => {
-        let ids = [];
-        setTimeout(() => {}, 1500);
+        let ids = []
+        setTimeout(() => {}, 1500)
 
         axios.post(urlPathname + '/search', {'word': crudSearch.value})
         .then((response) => {
             Object.keys(response.data).forEach((index) => {
                 if (response.data[index].length > 0) {
-                    let recordIds = response.data[index];
+                    let recordIds = response.data[index]
                     Object.keys(recordIds).forEach((i) => {
-                        ids.push(recordIds[i].id);
-                    });
+                        ids.push(recordIds[i].id)
+                    })
                 }
-            });
+            })
 
-            updateContent(ids);
-        });
+            updateContent(ids)
+        })
 
         if (crudSearch.value === '' || crudSearch.value === ' ') {
-            updateContent();
+            updateContent()
         }
 
-    });
+    })
 
     /* Скрыть ошибки | Hide errors */
     function hideErrors() {
-        errorElement.innerHTML = '';
-        errorElement.classList.add('hidden');
+        errorElement.innerHTML = ''
+        errorElement.classList.add('hidden')
     }
 
     /* Очистить поля в модальном окне | Clean modal fields */
     function cleanModal() {
-        hideErrors();
+        hideErrors()
         Object.keys(modalFields).forEach((index) => {
-            const field = document.querySelector(`[name=${index}]`);
-            field.value = '';
+            const field = document.querySelector(`[name=${index}]`)
+            field.value = ''
 
             if (field.tagName == 'SELECT') {
-                field.options[0].selected = true;
+                field.options[0].selected = true
             }
-        });
+        })
     }
 
     /* Обновить контент | Update content */
     function updateContent(search = null) {
-        let urlConfig = urlPathname;
+        let urlConfig = urlPathname
 
         if (search !== null) {
-            urlConfig += '?ids=' + search;
+            urlConfig += '?ids=' + search
         }
 
         axios.get(urlConfig)
         .then((response) => {
-            let parser = new DOMParser().parseFromString(response.data, 'text/html');
-            crudTable.querySelector('tbody').innerHTML = '';
+            let parser = new DOMParser().parseFromString(response.data, 'text/html')
+            crudTable.querySelector('tbody').innerHTML = ''
             Object.values(parser.querySelectorAll('#crudTable tbody tr')).forEach((elem) => {
-                crudTable.querySelector('tbody').append(elem);
-            });
-        });
+                crudTable.querySelector('tbody').append(elem)
+            })
+        })
     }
 }
 
 function profileController() {
-    const profile               = document.querySelector('#profilePage');
-    const profilePic            = profile.querySelector('#profile-pic');
-    const profilePicEditElement = profile.querySelector('#profile-pic-edit');
+    const profile               = document.querySelector('#profilePage')
+    const profilePic            = profile.querySelector('#profile-pic')
+    const profilePicEditElement = profile.querySelector('#profile-pic-edit')
 
     profilePic.addEventListener('mouseover', () => {
-        profilePicEditElement.classList.remove('hidden');
-    });
+        profilePicEditElement.classList.remove('hidden')
+    })
 
     profilePicEditElement.addEventListener('mouseout', () => {
-        profilePicEditElement.classList.add('hidden');
-    });
+        profilePicEditElement.classList.add('hidden')
+    })
 }

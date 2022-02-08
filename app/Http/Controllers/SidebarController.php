@@ -26,11 +26,13 @@ class SidebarController extends Controller
             'users' => [
                 'url'   => '/users_crud',
                 'icon'  => 'users',
+                'title' => 'Пользователи',
                 'roles' => []
             ],
             'cabinets' => [
                 'url'   => '/cabinets_crud',
                 'icon'  => 'columns',
+                'title' => 'Кабинеты',
                 'roles' => []
             ]
         ];
