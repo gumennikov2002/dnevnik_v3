@@ -1,5 +1,5 @@
 const { default: axios } = require("axios");
-
+//test git
 const urlBase = window.location.origin;
 const urlPathname = window.location.pathname;
 axios.defaults.headers.post['X-CSRF-TOKEN'] = document.querySelector('input[name=_token]').value;
