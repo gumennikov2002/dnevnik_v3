@@ -13,7 +13,7 @@ class UsersController extends CrudController
         $this->CONFIG = [
             'title'        => 'Пользователи',
             'page_title'   => 'Пользователи',
-            'table_heads'  => ['#', 'ФИО', 'Телефон', 'Эл. почта', 'Дата рождения', 'Доп. инфо', 'Тип'],
+            'table_heads'  => ['#', 'ФИО', 'Пол', 'Телефон', 'Эл. почта', 'Дата рождения', 'Доп. инфо', 'Роль'],
             'table_body'   => json_decode(User::all()),
             'modal_fields' => [
                 'full_name' => [
@@ -21,6 +21,21 @@ class UsersController extends CrudController
                     'type'        => 'text',
                     'name'        => 'full_name',
                     'placeholder' => 'Фамилия Имя Отчество'
+                ],
+                'gender' => [
+                    'field_type'  => 'select',
+                    'name'        => 'gender',
+                    'placeholder' => 'Пол',
+                    'options'     => [
+                        'male'  => [
+                            'label' => 'Мужской',
+                            'value' => 'Мужской'
+                        ],
+                        'female' => [
+                            'label' => 'Женский',
+                            'value' => 'Женский'
+                        ]
+                    ]
                 ],
                 'phone' => [
                     'field_type'  => 'input',
@@ -45,22 +60,22 @@ class UsersController extends CrudController
                     'name'        => 'additional_info',
                     'placeholder' => 'Доп. инфо'
                 ],
-                'role' => [
+                'role_id' => [
                     'field_type'  => 'select',
-                    'name'        => 'role',
+                    'name'        => 'role_id',
                     'placeholder' => 'Тип пользователя',
                     'options'     => [
                         'student' => [
                             'label' => 'Ученик',
-                            'value' => 'STUDENT'
+                            'value' => 0
                         ],
                         'teacher' => [
                             'label' => 'Учитель',
-                            'value' => 'TEACHER'
+                            'value' => 1
                         ],
                         'director' => [
                             'label' => 'Директор',
-                            'value' => 'DIRECTOR'
+                            'value' => 2
                         ]
                     ]
                 ]
@@ -70,9 +85,10 @@ class UsersController extends CrudController
             'full_name'       => 'required',
             'phone'           => 'required|integer',
             'date_of_birth'   => 'required',
-            'role'            => 'required',
+            'role_id'         => 'required',
             'email'           => 'nullable',
-            'additional_info' => 'nullable'
+            'additional_info' => 'nullable',
+            'gender'          => 'required'
         ];
     }
 }

@@ -8,7 +8,8 @@ axios.defaults.headers.post['X-CSRF-TOKEN'] = document.querySelector('input[name
 routeManager();
 
 function routeManager() {
-    urlPathname !== '/auth' ? sidebarController() : authController();
+    urlPathname !== '/auth'    ? sidebarController() : authController();
+    urlPathname === '/profile' ? profileController() : null;
     urlPathname.split('_')[1] === 'crud' ? crudController() : null;
 }
 
@@ -278,4 +279,18 @@ function crudController() {
             });
         });
     }
+}
+
+function profileController() {
+    const profile               = document.querySelector('#profilePage');
+    const profilePic            = profile.querySelector('#profile-pic');
+    const profilePicEditElement = profile.querySelector('#profile-pic-edit');
+
+    profilePic.addEventListener('mouseover', () => {
+        profilePicEditElement.classList.remove('hidden');
+    });
+
+    profilePicEditElement.addEventListener('mouseout', () => {
+        profilePicEditElement.classList.add('hidden');
+    });
 }

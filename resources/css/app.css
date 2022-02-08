@@ -1,3 +1,5 @@
+@import 'animate.css';
+
 #sidebar {
     float: left;
     position: fixed;
@@ -8,7 +10,7 @@
 .z-top {z-index: 99999;}
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 .gradient {
@@ -208,6 +210,14 @@ img.snow {
     .top-bar h2 {
         margin-left: 0;
     }
+
+    .widget-profile-info span {
+        font-size: 14px !important;
+    }
+
+    #profilePage #profile-image-wrapper, .widget-element {
+        background-repeat:unset !important;
+    }
 }
 
 @media screen and (max-width: 1200px) {
@@ -223,6 +233,16 @@ img.snow {
         width: 496px;
         height: 400px;
         margin-top: -210px;
+    }
+
+    .widget-profile-info {
+        width: 100% !important;
+        font-size: 16px !important;
+        margin-bottom: 20px;
+    }
+
+    .widget-profile-info-wrapper {
+        flex-direction: column !important;
     }
 }
 
