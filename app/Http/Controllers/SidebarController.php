@@ -34,6 +34,12 @@ class SidebarController extends Controller
                 'icon'  => 'columns',
                 'title' => 'Кабинеты',
                 'roles' => []
+            ],
+            'classrooms' => [
+                'url' => '/classrooms_crud',
+                'icon' => 'child',
+                'title' => 'Классы',
+                'roles' => []
             ]
         ];
 

@@ -2,22 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Cabinet;
+use App\Models\Classroom;
 use Illuminate\Http\Request;
-use stdClass;
 
-class CabinetController extends CrudController
+class ClassroomsController extends CrudController
 {
     public function __construct()
     {
         parent::__construct();
 
-        $this->MODEL_NAME = 'App\Models\Cabinet';
+        $this->MODEL_NAME = 'App\Models\Classroom';
         $this->CONFIG = [
-            'title' => 'Кабинеты',
-            'page_title' => 'Кабинеты',
-            'table_heads' => ['#', 'Номер кабинета'],
-            'table_body'  => json_decode(Cabinet::all()),
+            'title' => 'Классы',
+            'page_title' => 'Классы',
+            'table_heads' => ['#', 'Класс', 'Классный руководитель'],
+            'table_body'  => json_decode(Classroom::all()),
             'modal_fields' => [
                 'class' => [
                     'field_type' => 'input',
@@ -26,7 +25,8 @@ class CabinetController extends CrudController
                     'placeholder' => 'Класс'
                 ],
                 'teacher_id' => [
-                    'field_type' => 'text',
+                    'field_type' => 'input',
+                    'type' => 'text',
                     'name' => 'teacher_id',
                     'placeholder' => 'Классный руководитель'
                 ]
