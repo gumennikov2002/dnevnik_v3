@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 class CrudController extends Controller
 {
     public const MODEL_NAME = '';
-    public const CONFIG = '';
-    public const VALIDATE = '';
+    public const CONFIG     = [];
+    public const VALIDATE   = [];
 
     public function __construct()
     {
@@ -61,8 +61,9 @@ class CrudController extends Controller
     public function search(Request $request) {
         $record = $this->MODEL_NAME;
         $search = [];
+        $fields_config = array_keys($this->CONFIG['modal_fields']);
 
-        foreach (array_keys($this->CONFIG['modal_fields']) as $field) {
+        foreach ($fields_config as $field) {
             $search[$field] = $record::select('id')->where($field, 'like', '%'.$request->word.'%')->get();
         }
 

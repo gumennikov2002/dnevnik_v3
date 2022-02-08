@@ -17,12 +17,13 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('profile_pic')->nullable(true)->default('images/default.png');
             $table->string('full_name')->nullable(false);
+            $table->string('gender')->nullable(false);
             $table->bigInteger('phone')->nullable(false)->unique();
             $table->string('email')->nullable(true)->unique();
             $table->string('password')->nullable(false)->default('$2y$10$NRK3jAm2oepfKvgCjPjSkeegzlKOegtC46oMVXQ8FLNzvcbrVFFle');
             $table->string('date_of_birth');
             $table->text('additional_info')->nullable(true);
-            $table->string('role');
+            $table->string('role_id')->nullable(false)->default(1);
             $table->timestamps();
         });
     }

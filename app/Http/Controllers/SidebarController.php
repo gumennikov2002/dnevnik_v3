@@ -40,7 +40,7 @@ class SidebarController extends Controller
     }
     
     public function load() {
-        $data = [
+        return response([
             'roles'   => $this->ROLES,
             'menu'    => $this->MENU,
             'profile' => [
@@ -57,8 +57,6 @@ class SidebarController extends Controller
                     ]
                 ]
             ]
-        ];
-
-        return response($data);
+        ]);
     }
 }

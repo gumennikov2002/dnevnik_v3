@@ -17,23 +17,20 @@ class AuthController extends Controller
             $phone = '7'.substr($request->post('phone'), 1);
             $password = $request->post('password');
 
-            $user = User::where('phone', $phone)->get();
+            $user = User::where('phone', $phone)->get()[0];
 
-            if (isset($user[0])) {
-                $user = $user[0];
+            if ($user) {
                 $check_password = Hash::check($password, $user->password);
                 
                 if ($check_password) {
                     session()->put('session_user_id', $user->id);
                     return response(true);
-                } else {
-                    return response(null, 500);
-                }
-            } else {
+                } 
+                
                 return response(null, 500);
             }
-        } else {
+
             return response(null, 500);
-        } 
+        }
     }
 }

@@ -16,7 +16,6 @@ class CabinetController extends CrudController
         $this->CONFIG = [
             'title' => 'Кабинеты',
             'page_title' => 'Кабинеты',
-            'modal_title' => 'Добавить кабинет',
             'table_heads' => ['#', 'Номер кабинета'],
             'table_body'  => json_decode(Cabinet::all()),
             'modal_fields' => [

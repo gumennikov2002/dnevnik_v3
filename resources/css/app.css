@@ -1,3 +1,5 @@
+@import 'animate.css';
+
 #sidebar {
     float: left;
     position: fixed;
@@ -8,14 +10,19 @@
 .z-top {z-index: 99999;}
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 .gradient {
     background: linear-gradient(90deg, rgba(75, 64, 170, 0.5) 0%, rgba(195, 0, 255, 0.5) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    display: table;
+}
+
+.blue-gradient {
+    background: linear-gradient(90deg, rgba(0,184,148,1) 0%, rgba(0,212,255,1) 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
 }
 
 .nav-pills .nav-link.active, .nav-pills .show>.nav-link {
@@ -189,10 +196,27 @@ img.snow {
     position: absolute;
 }
 
+@media screen and (max-width: 1500px) {
+    .top-bar h2 {
+        margin-left: 60px;
+    }
+}
 
 @media screen and (max-width: 1400px) {
     img.snow {
         width: 396px;
+    }
+
+    .top-bar h2 {
+        margin-left: 0;
+    }
+
+    .widget-profile-info span {
+        font-size: 14px !important;
+    }
+
+    #profilePage #profile-image-wrapper, .widget-element {
+        background-repeat:unset !important;
     }
 }
 
@@ -209,6 +233,16 @@ img.snow {
         width: 496px;
         height: 400px;
         margin-top: -210px;
+    }
+
+    .widget-profile-info {
+        width: 100% !important;
+        font-size: 16px !important;
+        margin-bottom: 20px;
+    }
+
+    .widget-profile-info-wrapper {
+        flex-direction: column !important;
     }
 }
 
