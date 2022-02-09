@@ -25,19 +25,19 @@ class SidebarController extends Controller
         $this->MENU = [
             'users' => [
                 'url'   => '/users_crud',
-                'icon'  => 'users',
+                'icon'  => 'people',
                 'title' => 'Пользователи',
                 'roles' => []
             ],
             'cabinets' => [
                 'url'   => '/cabinets_crud',
-                'icon'  => 'columns',
+                'icon'  => 'tablet-portrait',
                 'title' => 'Кабинеты',
                 'roles' => []
             ],
             'classrooms' => [
                 'url'   => '/classrooms_crud',
-                'icon'  => 'child',
+                'icon'  => 'accessibility',
                 'title' => 'Классы',
                 'roles' => []
             ]

@@ -77,15 +77,13 @@ function sidebarController() {
     const closeMenu              = document.querySelector('#closeMenu')
 
     openMenu.addEventListener('click', () => {
-        mobileMenu.classList.remove('hidden')
-        mobileMenu.classList.remove('fadeOutMenu')
-        mobileMenu.classList.add('fadeInMenu')
+        mobileMenu.classList.remove('hidden', 'animate__animated', 'animate__fadeOutDown')
+        mobileMenu.classList.add('animate__animated', 'animate__fadeInUp')
     })
 
     closeMenu.addEventListener('click', () => {
-        mobileMenu.classList.remove('fadeInMenu')
-        mobileMenu.classList.add('fadeOutMenu')
-        mobileMenu.classList.add('hidden')
+        mobileMenu.classList.remove('animate__animated', 'animate__fadeInUp')
+        mobileMenu.classList.add('animate__animated', 'animate__fadeOutDown')
     })
 
 
@@ -98,14 +96,14 @@ function sidebarController() {
         Object.keys(menu).forEach((index) => {
             sidebarContainer.innerHTML += `
                 <li>
-                    <a href="${menu[index].url}" class="nav-link py-3 border-bottom ${urlPathname == menu[index].url ? 'active' : ''}">
-                        <i class="blue-gradient fa fa-${menu[index].icon}"></i>
+                    <a href="${menu[index].url}" class="nav-link py-3 ${urlPathname == menu[index].url ? 'active' : ''}">
+                        <ion-icon class="text-light" name="${menu[index].icon}"></ion-icon>
                     </a>
                 </li>
             `
 
             bottomSidebarContainer.querySelector('.items').innerHTML += `
-                <a href="${menu[index].url}"><i class="fa fa-${menu[index].icon} gradient"></i></a>
+                <a href="${menu[index].url}"><ion-icon class="text-primary" name="${menu[index].icon}"></ion-icon></a>
             `
 
             mobileMenu.querySelector('ul').innerHTML += `
@@ -114,10 +112,12 @@ function sidebarController() {
         })
 
         Object.keys(profile.profile_menu).forEach((index, value) => {
-            const dropdownMenu = document.querySelector('.dropdown-menu')
+            const dropdownMenu = document.querySelectorAll('.dropdown-menu')
             const menu         = profile.profile_menu
 
-            dropdownMenu.insertAdjacentHTML('afterbegin', `<li><a class="dropdown-item" href="${menu[index].link}">${menu[index].title}</a></li>`)
+            dropdownMenu.forEach((elem) => {
+                elem.insertAdjacentHTML('afterbegin', `<li><a class="dropdown-item" href="${menu[index].link}">${menu[index].title}</a></li>`)
+            })
         })
 
         document.querySelector('#profile-pic').setAttribute('src', profile.profile_pic)
@@ -179,18 +179,30 @@ function crudController() {
                 errorElement.innerHTML += `<span>${error.response.data.errors[index]}</span> <br>`
             })
         })
+
+        document.querySelector('.text-no-records').innerHTML = ''
     })
 
     /* Отслеживание кликов динамических объектов | Dynamic objects click tracker */
     document.addEventListener('click', (e) => {
+
         /* Удалить запись | Delete record */
         if (e.target && e.target.classList.contains('rowDelete')) {
+            const warningModal = document.querySelector('#warningModal')
             let rowId = e.target.parentNode.parentNode.getAttribute('data-id')
 
-            axios.post(urlPathname + '/delete', {'id': rowId})
-            e.target.parentNode.removeChild
-            e.target.parentNode.parentNode.innerHTML = ''
-        }
+            warningModal.querySelector('#deleteAccept').onclick = () => {
+                axios.post(urlPathname + '/delete', {'id': rowId})
+
+                e.target.parentNode.parentNode.classList.add('animate__animated', 'animate__fadeOut')
+                setTimeout(() => {
+                    e.target.parentNode.removeChild
+                    e.target.parentNode.parentNode.innerHTML = ''
+    
+                }, 450)
+            }
+
+        } 
 
         /* Получить данные записи в модальном окне | Get record data in modal window */
         if (e.target && e.target.classList.contains('rowEdit')) {
@@ -230,7 +242,7 @@ function crudController() {
     /* Поиск по странице | Page search */
     crudSearch.addEventListener('keyup', () => {
         let ids = []
-        setTimeout(() => {}, 1500)
+        setTimeout(() => {}, 2000)
 
         axios.post(urlPathname + '/search', {'word': crudSearch.value})
         .then((response) => {
@@ -284,6 +296,7 @@ function crudController() {
             let parser = new DOMParser().parseFromString(response.data, 'text/html')
             crudTable.querySelector('tbody').innerHTML = ''
             Object.values(parser.querySelectorAll('#crudTable tbody tr')).forEach((elem) => {
+                elem.classList.add('animate__animated', 'animate__fadeIn')
                 crudTable.querySelector('tbody').append(elem)
             })
         })

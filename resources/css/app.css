@@ -1,10 +1,72 @@
 @import 'animate.css';
 
+@font-face {
+    font-family: 'Proxima';
+    src: url('../../public/fonts/sf/proxima.ttf');
+}
+
+@font-face {
+    font-family: 'ProximaBold';
+    src: url('../../public/fonts/sf/proximanova_bold.otf');
+}
+
+* {
+    font-family: 'Proxima';
+}
+
+h1, h2, h3, h4, h5 {
+    font-family: 'ProximaBold';
+}
+
+.text-primary {
+    color: rgba(75, 64, 170, 0.8) !important;
+}
+
+.btn-primary {
+    background: rgba(75, 64, 170, 0.8) !important;
+    border: none;
+    transition: 0.3s;
+}
+
 #sidebar {
     float: left;
     position: fixed;
     height: 100%;
     z-index: 99;
+    background: rgba(75, 64, 170, 0.5) !important;
+}
+
+#sidebarLogo {
+    background: #fff;
+    width: 57px;
+    height: 57px;
+    border-radius: 50%;
+    margin-left: 6px;
+    margin-top: 6px;
+}
+
+#sidebar ion-icon {
+    font-size: 18px;
+}
+
+#crudTemplate ion-icon {
+    font-size: 36px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.thead-custom {
+    background: rgba(75, 64, 170, 0.6);
+    color: #fff;
+}
+
+.table>:not(:first-child) {
+    border-top: none;
+}
+
+#crudTemplate ion-icon:hover, .btn-primary:hover {
+    opacity: 0.7;
+    transition: 0.3s;
 }
 
 .z-top {z-index: 99999;}
@@ -26,22 +88,12 @@
 }
 
 .nav-pills .nav-link.active, .nav-pills .show>.nav-link {
-    background-color: #ededed;
-    border-right: 2px solid #0dcaf0;
+    background-color: rgba(75, 64, 170, 0.85);
+    border-radius: 0;
 }
 
 .nav-pills .nav-link:hover {
-    background-color: #ededed;
-}
-
-.top-bar {
-    left: 0;
-    top: 0;
-    z-index: 2;
-    position: absolute;
-    background: #f8f9fa;
-    width: 100%;
-    height: 60px;
+    background-color: rgba(75, 64, 170, 0.7);
 }
 
 .light-shadow {
@@ -101,6 +153,7 @@
     height: 100%;
     background: linear-gradient(90deg, rgba(75, 64, 170, 0.5) 0%, rgba(195, 0, 255, 0.5) 100%);
     color: #fff;
+    backdrop-filter: blur(5px);
 }
 
 #menu ul {
@@ -119,25 +172,7 @@
     margin-bottom: 10px;
 }
 
-@keyframes fadeInMenu {
-    0% {
-        display: none;
-        opacity: 0;
-      }
-    
-      1% {
-        display: block;
-        opacity: 0;
-      }
-    
-      100% {
-        display: block;
-        opacity: 1;
-        backdrop-filter: blur(5px);
-      }
-}
-
-.spacer {margin-top: 70px;}
+.spacer {margin-top: 30px;}
 
 #authPage {
     background: url('../../public/images/bg-register-img.jpg') no-repeat;
@@ -173,6 +208,17 @@
 
 .form-control-custom::placeholder, .form-control-custom:focus {
     color: #fff;
+}
+
+#crudTemplate .form-control-custom {
+    background: none;
+    border: none;
+    border-bottom: 2px solid rgba(75, 64, 170, 0.8);
+    color: #000;
+}
+
+#crudTemplate .form-control-custom::placeholder, .form-control-custom:focus {
+    color: #000;
 }
 
 .form-control-custom:focus {

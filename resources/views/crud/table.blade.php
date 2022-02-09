@@ -3,15 +3,15 @@
 @section('page_title', $page_title)
 @section('content')
 
-<div class="d-flex justify-content-between">
-    <div class="btn btn-info text-light" data-bs-toggle="modal" data-bs-target="#myModal" id="openModal">Добавить</div>
-    <div class="btn btn-info text-light hidden" data-bs-toggle="modal" data-bs-target="#myModal" id="editModal"></div>
-    <input type="text" class="form-control" placeholder="Поиск" style="width: 200px" id="crudSearch">
+<div class="d-flex justify-content-between" id="crudTemplate">
+    <ion-icon name="add-circle" class="text-primary" data-bs-toggle="modal" data-bs-target="#myModal" id="openModal"></ion-icon>
+    <div class="hidden" data-bs-toggle="modal" data-bs-target="#myModal" id="editModal"></div>
+    <input type="text" class="form-control form-control-custom" placeholder="Поиск" style="width: 200px" id="crudSearch">
 </div>
 
-<div class="col-md-12 table-responsive mt-2">
-    <table class="table text-center table-hover" id="crudTable">
-        <thead class="thead-inverse">
+<div class="col-md-12 table-responsive mt-3">
+    <table class="table text-center table-hover animate__animated animate__fadeIn" id="crudTable">
+        <thead class="thead-custom">
             <tr>
                 @foreach($table_heads as $head_title)
                     <td>{{ $head_title }}</td>
@@ -26,20 +26,20 @@
                         <td>{{ $row }}</td>
                     @endforeach
                     <td>
-                        <i class="fa fa-edit gradient rowEdit" style="cursor: pointer;"></i>
-                        <i class="fa fa-close rowDelete text-danger" style="margin-left: 10px; cursor: pointer;"></i>
+                        <ion-icon name="create" class="rowEdit text-primary" style="cursor: pointer; font-size:24px"></ion-icon>
+                        <ion-icon name="close-circle" data-bs-toggle="modal" data-bs-target="#warningModal" class="rowDelete text-danger" style="margin-left: 10px; cursor: pointer; font-size:24px"></ion-icon>
                     </td>
                 </tr>
             @endforeach
         </tbody>
     </table>
     @if(empty($table_body))
-        <div class="text-center">Нет записей.</div>
+        <div class="text-center text-no-records animate__animated animate__zoomIn">Нет записей.</div>
     @endif
 </div>
 
 <div class="modal fade" id="myModal" tabindex="-1">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"></h5>
@@ -68,10 +68,28 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" id="cleanModal">Очистить</button>
-                <button type="button" class="btn btn-info text-light" id="modalSaveBtn">Сохранить</button>
+                <button type="button" class="btn btn-primary text-light" id="modalSaveBtn">Сохранить</button>
             </div>
         </div>
     </div>
+</div>
+
+<div class="modal fade" id="warningModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Предупреждение</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+      </div>
+      <div class="modal-body">
+        <p>Вы точно хотите удалить запись?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="deleteAccept">Удалить</button>
+      </div>
+    </div>
+  </div>
 </div>
 <script>
     let modalFields = '<?= json_encode($modal_fields); ?>';

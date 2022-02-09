@@ -1,9 +1,9 @@
 <div class="d-flex flex-column flex-shrink-0 bg-light light-shadow" id="sidebar">
     <a href="/" class="d-block p-3 text-decoration-none text-center" id="sidebarLogo">
-        <img src="images/logo.png" width="50px" ondragstart="return false;">
+        <img src="images/logo.png" width="32px" ondragstart="return false;">
     </a>
-    <ul class="nav nav-pills nav-flush flex-column mb-auto text-center" id="sidebarContainer"></ul>
-    <div class="dropdown border-top">
+    <ul class="nav nav-pills nav-flush flex-column mb-auto text-center pt-2" id="sidebarContainer"></ul>
+    <div class="dropdown">
         <a href="#" class="d-flex align-items-center justify-content-center p-3 link-dark text-decoration-none dropdown-toggle" id="dropdownUser3" data-bs-toggle="dropdown" aria-expanded="false">
             <img src="images/default.png" width="24" height="24" class="rounded-circle" id="profile-pic">
         </a>
@@ -18,15 +18,15 @@
 
 <div id="menu" class="z-top hidden">
     <h2>Меню</h2>
-    <i class="fa fa-close" id="closeMenu"></i>
+    <ion-icon name="close" id="closeMenu" class="text-light"></ion-icon>
     <ul class="text-center mt-5">
 
     </ul>
 </div>
 
-<div id="bottom-sidebar" class="bg-light light-shadow">
+<div id="bottom-sidebar" class="light-shadow">
     <div class="d-flex justify-content-between">
-        <i class="fa fa-bars gradient" id="openMenu"></i>
+        <ion-icon name="grid" class="text-primary" id="openMenu"></ion-icon>
         <div class="items">
 
         </div>
