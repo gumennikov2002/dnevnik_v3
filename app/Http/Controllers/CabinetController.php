@@ -14,27 +14,21 @@ class CabinetController extends CrudController
 
         $this->MODEL_NAME = 'App\Models\Cabinet';
         $this->CONFIG = [
-            'title'       => 'Кабинеты',
-            'page_title'  => 'Кабинеты',
+            'title' => 'Кабинеты',
+            'page_title' => 'Кабинеты',
             'table_heads' => ['#', 'Номер кабинета'],
             'table_body'  => json_decode(Cabinet::all()),
             'modal_fields' => [
-                'class' => [
-                    'field_type'  => 'input',
-                    'type'        => 'text',
-                    'name'        => 'class',
-                    'placeholder' => 'Класс'
-                ],
-                'teacher_id' => [
-                    'field_type'  => 'text',
-                    'name'        => 'teacher_id',
-                    'placeholder' => 'Классный руководитель'
+                'num' => [
+                    'field_type' => 'input',
+                    'type' => 'text',
+                    'name' => 'num',
+                    'placeholder' => 'Номер кабинета'
                 ]
             ]
         ];
         $this->VALIDATE = [
-            'class'      => 'required|unique:classrooms',
-            'teacher_id' => 'required|numeric'
+            'num' => 'required'
         ];
     }
 }
