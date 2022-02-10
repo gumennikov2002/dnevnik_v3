@@ -17,10 +17,21 @@ class CrudController extends Controller
 
     public function index(Request $request) {
         $data = $this->CONFIG;
-        $ids = explode(',', $request->get('ids'));
+        $get_ids = $request->get('ids');
+        $ids = explode(',', $get_ids);
+        $records = json_decode($this->MODEL_NAME::whereIn('id', $ids)->get());
+        $all_records = json_decode($this->MODEL_NAME::all());
 
-        if ($request->get('ids')) {
-            $data['table_body'] = json_decode($this->MODEL_NAME::whereIn('id', $ids)->get());
+        if (!isset($_GET['ids'])) {
+            $data['table_body'] = $all_records;
+        }
+
+        if ($get_ids !== null) {
+            $data['table_body'] = $records;
+
+            if (empty($records)) {
+                $data['table_body'] = [];
+            }
         }
 
         return view('crud.table', $data);

@@ -17,7 +17,7 @@ class CabinetController extends CrudController
             'title' => 'Кабинеты',
             'page_title' => 'Кабинеты',
             'table_heads' => ['#', 'Номер кабинета'],
-            'table_body'  => json_decode(Cabinet::all()),
+            'table_body'  => [],
             'modal_fields' => [
                 'num' => [
                     'field_type' => 'input',

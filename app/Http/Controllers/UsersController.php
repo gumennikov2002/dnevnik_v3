@@ -14,7 +14,7 @@ class UsersController extends CrudController
             'title'        => 'Пользователи',
             'page_title'   => 'Пользователи',
             'table_heads'  => ['#', 'ФИО', 'Пол', 'Телефон', 'Эл. почта', 'Дата рождения', 'Доп. инфо', 'Роль'],
-            'table_body'   => json_decode(User::all()),
+            'table_body'   => [],
             'modal_fields' => [
                 'full_name' => [
                     'field_type'  => 'input',

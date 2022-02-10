@@ -16,7 +16,7 @@ class ClassroomsController extends CrudController
             'title' => 'Классы',
             'page_title'  => 'Классы',
             'table_heads' => ['#', 'Класс', 'Классный руководитель'],
-            'table_body'  => json_decode(Classroom::all()),
+            'table_body'  => [],
             'modal_fields' => [
                 'class' => [
                     'field_type'  => 'input',
