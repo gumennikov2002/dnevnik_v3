@@ -23,7 +23,7 @@ class CreateUsersTable extends Migration
             $table->string('password')->nullable(false)->default('$2y$10$NRK3jAm2oepfKvgCjPjSkeegzlKOegtC46oMVXQ8FLNzvcbrVFFle');
             $table->string('date_of_birth');
             $table->text('additional_info')->nullable(true);
-            $table->string('role_id')->nullable(false)->default(1);
+            $table->string('role')->nullable(false)->default('Ученик');
             $table->timestamps();
         });
     }

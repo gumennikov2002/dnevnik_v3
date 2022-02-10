@@ -242,7 +242,6 @@ function crudController() {
     /* Поиск по странице | Page search */
     crudSearch.addEventListener('keyup', () => {
         let ids = []
-        setTimeout(() => {}, 2000)
 
         axios.post(urlPathname + '/search', {'word': crudSearch.value})
         .then((response) => {

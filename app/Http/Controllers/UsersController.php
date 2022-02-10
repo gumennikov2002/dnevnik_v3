@@ -60,22 +60,34 @@ class UsersController extends CrudController
                     'name'        => 'additional_info',
                     'placeholder' => 'Доп. инфо'
                 ],
-                'role_id' => [
+                'role' => [
                     'field_type'  => 'select',
-                    'name'        => 'role_id',
+                    'name'        => 'role',
                     'placeholder' => 'Тип пользователя',
                     'options'     => [
                         'student' => [
                             'label' => 'Ученик',
-                            'value' => 0
+                            'value' => 'Ученик'
                         ],
                         'teacher' => [
                             'label' => 'Учитель',
-                            'value' => 1
+                            'value' => 'Учитель'
+                        ],
+                        'classroom_teacher' => [
+                            'label' => 'Классный руководитель',
+                            'value' => 'Классный руководитель'
+                        ],
+                        'pre_director' => [
+                            'label' => 'Зам. директора',
+                            'value' => 'Зам. директора'
                         ],
                         'director' => [
                             'label' => 'Директор',
-                            'value' => 2
+                            'value' => 'Директор'
+                        ],
+                        'admin' => [
+                            'label' => 'Админ',
+                            'value' => 'Админ'
                         ]
                     ]
                 ]
@@ -85,7 +97,7 @@ class UsersController extends CrudController
             'full_name'       => 'required',
             'phone'           => 'required|integer',
             'date_of_birth'   => 'required',
-            'role_id'         => 'required',
+            'role'            => 'required',
             'email'           => 'nullable',
             'additional_info' => 'nullable',
             'gender'          => 'required'
