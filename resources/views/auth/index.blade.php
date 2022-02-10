@@ -9,8 +9,8 @@
             <div class="col-lg-4 col-md-8 col-sm-10 window">
                 <img src="images/snow.png" class="snow" ondragstart="return false;">
                 <div class="text-center mb-5 mt-5">
-                    <img class="logo-auth mb-2" src="images/logo.png">
-                    <h4 class="text-light">Авторизация</h4>
+                    <img class="mb-2" src="images/logo-w.png" width="64px">
+                    <h4 class="text-light mt-2">Авторизация</h4>
                 </div>
                 <input type="text" name="phone" class="form-control form-control-custom mb-4" placeholder="Номер телефона">
                 <input type="password" name="password" class="form-control form-control-custom mb-4" placeholder="Пароль">

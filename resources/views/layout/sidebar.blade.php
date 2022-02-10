@@ -1,6 +1,6 @@
 <div class="d-flex flex-column flex-shrink-0 bg-light light-shadow" id="sidebar">
     <a href="/" class="d-block p-3 text-decoration-none text-center" id="sidebarLogo">
-        <img src="images/logo.png" width="32px" ondragstart="return false;">
+        <img src="images/logo-w.png" width="32px" ondragstart="return false;">
     </a>
     <ul class="nav nav-pills nav-flush flex-column mb-auto text-center pt-2" id="sidebarContainer"></ul>
     <div class="dropdown">

@@ -36,15 +36,6 @@ h1, h2, h3, h4, h5 {
     background: rgba(75, 64, 170, 0.5) !important;
 }
 
-#sidebarLogo {
-    background: #fff;
-    width: 57px;
-    height: 57px;
-    border-radius: 50%;
-    margin-left: 6px;
-    margin-top: 6px;
-}
-
 #sidebar ion-icon {
     font-size: 18px;
 }
