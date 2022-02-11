@@ -22,6 +22,12 @@ class CrudController extends Controller
         $ids = explode(',', $get_ids);
         $records = json_decode($this->MODEL_NAME::whereIn('id', $ids)->get());
         $all_records = json_decode($this->MODEL_NAME::all());
+        $get_params_track = explode('?', $_SERVER['REQUEST_URI']);
+        $model_path = 'App\Models\\';
+
+        if (!isset($get_params_track[1])) {
+            $data['table_body'] = $all_records;
+        }
         
         if (!empty($this->REFERENCES)) {
             foreach ($all_records as $index => $record) {
@@ -29,7 +35,7 @@ class CrudController extends Controller
                 $reference_keys = array_keys($references);
                 
                 foreach ($reference_keys as $key) {
-                    $model = 'App\Models\\'.$references[$key]['model'];
+                    $model = $model_path.$references[$key]['model'];
                     $need_get = $references[$key]['get'];
                     $get = $model::where('id', $all_records[$index]->$key)->first();
                     $all_records[$index]->$key = $get->$need_get;
@@ -37,20 +43,18 @@ class CrudController extends Controller
             }
         }
 
-        if (isset($_GET['ids']) && !empty($this->REFERENCES)) {
+        if (isset($get_params_track[1]) && !empty($this->REFERENCES)) {
             foreach ($records as $index => $record) {
                 $references = $this->REFERENCES;
                 $reference_keys = array_keys($references);
                 
                 foreach ($reference_keys as $key) {
-                    $model = 'App\Models\\'.$references[$key]['model'];
+                    $model = $model_path.$references[$key]['model'];
                     $need_get = $references[$key]['get'];
                     $get = $model::where('id', $records[$index]->$key)->first();
                     $records[$index]->$key = $get->$need_get;
                 }
             }
-        } else {
-            $data['table_body'] = $all_records;
         }
 
         if ($get_ids !== null) {

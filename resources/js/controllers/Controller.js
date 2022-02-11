@@ -270,6 +270,16 @@ function crudController() {
 
     /* Поиск по странице | Page search */
     goSearch.addEventListener('click', () => {
+        search()
+    })
+
+    crudSearch.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            search()
+        }
+    })
+
+    function search() {
         let ids = []
 
         axios.post(urlPathname + '/search', {'word': crudSearch.value})
@@ -289,8 +299,7 @@ function crudController() {
         if (crudSearch.value === '' || crudSearch.value === ' ') {
             updateContent()
         }
-
-    })
+    }
 
     /* Скрыть ошибки | Hide errors */
     function hideErrors() {
