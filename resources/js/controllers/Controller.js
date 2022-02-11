@@ -1,3 +1,5 @@
+import tippy from 'tippy.js'
+
 const { default: axios } = require("axios")
 
 const urlBase     = window.location.origin
@@ -95,13 +97,14 @@ function sidebarController() {
 
         Object.keys(menu).forEach((index) => {
             sidebarContainer.innerHTML += `
-                <li>
-                    <a href="${menu[index].url}" class="nav-link py-3 ${urlPathname == menu[index].url ? 'active' : ''}">
-                        <ion-icon class="text-light" name="${menu[index].icon}"></ion-icon>
-                    </a>
-                </li>
+            <li>
+                <a href="${menu[index].url}" class="nav-link py-3 ${menu[index].class} ${urlPathname == menu[index].url ? 'active' : ''}">
+                    <ion-icon class="text-light" name="${menu[index].icon}"></ion-icon>
+                </a>
+            </li>
             `
 
+            
             bottomSidebarContainer.querySelector('.items').innerHTML += `
                 <a href="${menu[index].url}"><ion-icon class="text-primary" name="${menu[index].icon}"></ion-icon></a>
             `
@@ -110,6 +113,10 @@ function sidebarController() {
                 <li><a href="${menu[index].url}">${menu[index].title}</a></li>
             `
         })
+
+        for (let i = 0; i < Object.keys(menu).length; i++) {
+            tippy(`.${Object.keys(menu)[i]}`, {content: `${Object.values(menu)[i].title}`, animation: 'fade', hideOnClick: true, theme: 'custom', theme: 'custom', placement: 'right'})
+        }
 
         Object.keys(profile.profile_menu).forEach((index, value) => {
             const dropdownMenu = document.querySelectorAll('.dropdown-menu')
@@ -139,6 +146,12 @@ function crudController() {
     const goSearch     = document.querySelector('#goSearch')
     const crudRefresh  = document.querySelector('#crudRefresh')
     const modaTitle    = document.querySelector('.modal-title')
+
+    tippy(openModal, {content: 'Добавить запись', animation: 'fade', hideOnClick: true, theme: 'custom'})
+    tippy(crudRefresh, {content: 'Обновить таблицу', animation: 'fade', hideOnClick: true, theme: 'custom'})
+    tippy(goSearch, {content: 'Поиск', animation: 'fade', hideOnClick: true, theme: 'custom'})
+    tippy('.rowEdit', {content: 'Изменить', animation: 'fade', hideOnClick: true, theme: 'custom'})
+    tippy('.rowDelete', {content: 'Удалить', animation: 'fade', hideOnClick: true, theme: 'custom'})
 
     /* Кнопка "Очистить" | Clean button */
     cleanBtn.addEventListener('click', () => {

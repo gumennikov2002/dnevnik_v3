@@ -27,18 +27,21 @@ class SidebarController extends Controller
                 'url'   => '/users_crud',
                 'icon'  => 'people',
                 'title' => 'Пользователи',
+                'class' => 'users',
                 'roles' => []
             ],
             'cabinets' => [
                 'url'   => '/cabinets_crud',
                 'icon'  => 'tablet-portrait',
                 'title' => 'Кабинеты',
+                'class' => 'cabinets',
                 'roles' => []
             ],
             'classrooms' => [
                 'url'   => '/classrooms_crud',
                 'icon'  => 'accessibility',
                 'title' => 'Классы',
+                'class' => 'classrooms',
                 'roles' => []
             ]
         ];
