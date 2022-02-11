@@ -4,9 +4,15 @@
 @section('content')
 
 <div class="d-flex justify-content-between" id="crudTemplate">
-    <ion-icon name="add-circle" class="text-primary" data-bs-toggle="modal" data-bs-target="#myModal" id="openModal"></ion-icon>
+    <div>
+        <ion-icon name="add-circle" class="text-primary" data-bs-toggle="modal" data-bs-target="#myModal" id="openModal"></ion-icon>
+        <ion-icon name="refresh-circle" class="text-primary" id="crudRefresh"></ion-icon>
+    </div>
     <div class="hidden" data-bs-toggle="modal" data-bs-target="#myModal" id="editModal"></div>
-    <input type="text" class="form-control form-control-custom" placeholder="Поиск" style="width: 200px" id="crudSearch">
+    <div>
+        <ion-icon name="search-circle" class="text-primary" id="goSearch"></ion-icon>
+        <input type="text" class="form-control form-control-custom" placeholder="Поиск" style="width: 200px" id="crudSearch" aria-hidden="true">
+    </div>
 </div>
 
 <div class="col-md-12 table-responsive mt-3">
@@ -56,7 +62,11 @@
                     @endif
 
                     @if($field['field_type'] == 'select')
-                        <select class="form-select mb-2 data-field" name='{{ $field['name'] }}'>
+                        @if (isset($field['options']['empty']))
+                            <select class="form-select mb-2 data-field" name='{{ $field['name'] }}' disabled>
+                        @else
+                            <select class="form-select mb-2 data-field" name='{{ $field['name'] }}'>
+                        @endif
                             @foreach($field['options'] as $option)
                                 <option value='{{ $option['value'] }}'>{{ $option['label'] }}</option>
                             @endforeach

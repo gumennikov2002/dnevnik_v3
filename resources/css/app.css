@@ -46,6 +46,21 @@ h1, h2, h3, h4, h5 {
     transition: 0.3s;
 }
 
+#goSearch + input#crudSearch {
+    padding-right: 32px;
+}
+
+#goSearch {
+    /* font-size: 24px !important; */
+    line-height: 26px;
+    text-align: center;
+    margin-left: -32px;
+    /* margin-top: 5px; */
+    position: relative;
+    z-index: 1;
+    float: right;
+}
+
 .thead-custom {
     background: rgba(75, 64, 170, 0.6);
     color: #fff;

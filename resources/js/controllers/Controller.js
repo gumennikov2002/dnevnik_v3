@@ -136,6 +136,8 @@ function crudController() {
     const editModal    = document.querySelector('#editModal')
     const crudTable    = document.querySelector('#crudTable')
     const crudSearch   = document.querySelector('#crudSearch')
+    const goSearch     = document.querySelector('#goSearch')
+    const crudRefresh  = document.querySelector('#crudRefresh')
     const modaTitle    = document.querySelector('.modal-title')
 
     /* Кнопка "Очистить" | Clean button */
@@ -143,9 +145,18 @@ function crudController() {
         cleanModal()
     })
 
+    /* Кнопка обновить таблицу | Update table button */
+    crudRefresh.addEventListener('click', () => {
+        updateContent()
+    })
+
     /* При нажатии кнопки "Добавить" очищает данные полей | Clean modal fields if button has been pressed */
     openModal.addEventListener('click', () => {
         cleanModal()
+        const recordId = modal.querySelector('.record-id')
+        recordId.removeAttribute('name')
+        recordId.classList.remove('record-id')
+        recordId.value = null
         modaTitle.innerHTML = 'Добавить запись'
     })
 
@@ -240,7 +251,7 @@ function crudController() {
     })
 
     /* Поиск по странице | Page search */
-    crudSearch.addEventListener('keyup', () => {
+    goSearch.addEventListener('click', () => {
         let ids = []
 
         axios.post(urlPathname + '/search', {'word': crudSearch.value})
