@@ -6,6 +6,7 @@ use App\Http\Controllers\CrudController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ClassroomsController;
 use App\Http\Controllers\SidebarController;
+use App\Http\Controllers\SubjectsController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
@@ -48,6 +49,13 @@ Route::group(['middleware' => 'AuthCheck'], function() {
     Route::post('classrooms_crud/get_fields', [ClassroomsController::class, 'get_fields']);
     Route::post('classrooms_crud/update', [ClassroomsController::class, 'update']);
     Route::post('classrooms_crud/search', [ClassroomsController::class, 'search']);
+
+    Route::get('subjects_crud', [SubjectsController::class, 'index']);
+    Route::post('subjects_crud/create', [SubjectsController::class, 'create']);
+    Route::post('subjects_crud/delete', [SubjectsController::class, 'delete']);
+    Route::post('subjects_crud/get_fields', [SubjectsController::class, 'get_fields']);
+    Route::post('subjects_crud/update', [SubjectsController::class, 'update']);
+    Route::post('subjects_crud/search', [SubjectsController::class, 'search']);
     
     Route::get('cabinets_crud', [CabinetController::class, 'index']);
     Route::post('cabinets_crud/create', [CabinetController::class, 'create']);
