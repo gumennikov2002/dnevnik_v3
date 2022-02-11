@@ -147,16 +147,21 @@ function crudController() {
 
     /* Кнопка обновить таблицу | Update table button */
     crudRefresh.addEventListener('click', () => {
+        crudSearch.value = ''
         updateContent()
     })
 
     /* При нажатии кнопки "Добавить" очищает данные полей | Clean modal fields if button has been pressed */
     openModal.addEventListener('click', () => {
         cleanModal()
-        const recordId = modal.querySelector('.record-id')
-        recordId.removeAttribute('name')
-        recordId.classList.remove('record-id')
-        recordId.value = null
+        
+        if (modal.querySelector('.record-id')) {
+            const recordId = modal.querySelector('.record-id')
+            recordId.removeAttribute('name')
+            recordId.classList.remove('record-id')
+            recordId.value = null
+        }
+
         modaTitle.innerHTML = 'Добавить запись'
     })
 
