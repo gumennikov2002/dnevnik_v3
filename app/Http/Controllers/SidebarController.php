@@ -23,6 +23,13 @@ class SidebarController extends Controller
         ];
 
         $this->MENU = [
+            'schedule' => [
+                'url'   => '/schedule_crud',
+                'icon'  => 'calendar',
+                'title' => 'Расписание',
+                'class' => 'schedule',
+                'roles' => []
+            ],
             'users' => [
                 'url'   => '/users_crud',
                 'icon'  => 'people',
@@ -46,7 +53,7 @@ class SidebarController extends Controller
             ],
             'subjects'   => [
                 'url'   => '/subjects_crud',
-                'icon'  => 'layers',
+                'icon'  => 'book',
                 'title' => 'Предметы',
                 'class' => 'subjects',
                 'roles' => []

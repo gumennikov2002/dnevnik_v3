@@ -20,14 +20,12 @@ class CrudController extends Controller
         $data = $this->CONFIG;
         $get_ids = $request->get('ids');
         $ids = explode(',', $get_ids);
-        $records = json_decode($this->MODEL_NAME::whereIn('id', $ids)->get());
-        $all_records = json_decode($this->MODEL_NAME::all());
-        $get_params_track = explode('?', $_SERVER['REQUEST_URI']);
+        $model_name = $this->MODEL_NAME;
+        $records = json_decode($model_name::whereIn('id', $ids)->get());
+        $all_records = json_decode($model_name::all());
         $model_path = 'App\Models\\';
 
-        if (!isset($get_params_track[1])) {
-            $data['table_body'] = $all_records;
-        }
+        $data['table_body'] = $model_name::paginate(15);
         
         if (!empty($this->REFERENCES)) {
             foreach ($all_records as $index => $record) {
@@ -43,7 +41,7 @@ class CrudController extends Controller
             }
         }
 
-        if (isset($get_params_track[1]) && !empty($this->REFERENCES)) {
+        if ($request->has('ids') && !empty($this->REFERENCES)) {
             foreach ($records as $index => $record) {
                 $references = $this->REFERENCES;
                 $reference_keys = array_keys($references);
@@ -58,7 +56,7 @@ class CrudController extends Controller
         }
 
         if ($get_ids !== null) {
-            $data['table_body'] = $records;
+            $data['table_body'] = $model_name::whereIn('id', $ids)->paginate(15);
 
             if (empty($records)) {
                 $data['table_body'] = [];

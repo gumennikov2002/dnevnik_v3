@@ -119,15 +119,16 @@ function sidebarController() {
         }
 
         Object.keys(profile.profile_menu).forEach((index, value) => {
-            const dropdownMenu = document.querySelectorAll('.dropdown-menu')
+            const dropdownMenu = document.getElementsByClassName('sidebar-dropdown dropdown-menu')
             const menu         = profile.profile_menu
 
-            dropdownMenu.forEach((elem) => {
-                elem.insertAdjacentHTML('afterbegin', `<li><a class="dropdown-item" href="${menu[index].link}">${menu[index].title}</a></li>`)
-            })
+            for (let i = 0; i < dropdownMenu.length; i++) {
+                dropdownMenu[i].insertAdjacentHTML('afterbegin', `<li><a class="dropdown-item" href="${menu[index].link}">${menu[index].title}</a></li>`)
+            }
         })
 
         document.querySelector('#profile-pic').setAttribute('src', profile.profile_pic)
+
     })
 }
 
@@ -152,6 +153,24 @@ function crudController() {
     tippy(goSearch, {content: 'Поиск', animation: 'fade', hideOnClick: true, theme: 'custom'})
     tippy('.rowEdit', {content: 'Изменить', animation: 'fade', hideOnClick: true, theme: 'custom'})
     tippy('.rowDelete', {content: 'Удалить', animation: 'fade', hideOnClick: true, theme: 'custom'})
+
+    document.querySelectorAll('.page-link').forEach((elem) => {
+        let page = null
+        
+        elem.addEventListener('click', (e) => {
+            e.preventDefault();
+            const active = document.querySelectorAll('.custom-paginate .active')[0];    
+
+            if (active) {
+                active.classList.remove('active')
+            }
+
+            page = e.target.innerHTML
+            e.target.parentNode.classList.add('active')
+            // window.history.pushState({} , '', `?page=${page}`)
+            paginateUpdate(page)
+        })
+    })
 
     /* Кнопка "Очистить" | Clean button */
     cleanBtn.addEventListener('click', () => {
@@ -301,6 +320,7 @@ function crudController() {
         }
     }
 
+
     /* Скрыть ошибки | Hide errors */
     function hideErrors() {
         errorElement.innerHTML = ''
@@ -324,8 +344,25 @@ function crudController() {
     function updateContent(search = null) {
         let urlConfig = urlPathname
 
-        if (search !== null) {
+        if (search) {
             urlConfig += '?ids=' + search
+        }
+
+        axios.get(urlConfig)
+        .then((response) => {
+            let parser = new DOMParser().parseFromString(response.data, 'text/html')
+            crudTable.querySelector('tbody').innerHTML = ''
+            Object.values(parser.querySelectorAll('#crudTable tbody tr')).forEach((elem) => {
+                elem.classList.add('animate__animated', 'animate__fadeIn')
+                crudTable.querySelector('tbody').append(elem)
+            })
+        })
+    }
+
+    function paginateUpdate(page = false) {
+        let urlConfig = urlPathname
+        if (page) {
+            urlConfig += '?page=' + page
         }
 
         axios.get(urlConfig)

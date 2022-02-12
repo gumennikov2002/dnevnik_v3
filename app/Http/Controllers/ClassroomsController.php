@@ -14,12 +14,13 @@ class ClassroomsController extends CrudController
 
         $this->MODEL_NAME = 'App\Models\Classroom';
         $this->CONFIG = [
-            'title'         => 'Классы',
-            'page_title'    => 'Классы',
-            'table_heads'   => ['#', 'Класс', 'Классный руководитель'],
-            'table_body'    => [],
-            'modal_fields'  => [
-                'class'     => [
+            'title'            => 'Классы',
+            'page_title'       => 'Классы',
+            'table_heads'      => ['#', 'Класс', 'Классный руководитель'],
+            'table_body'       => [],
+            'table_filters'    => [],
+            'modal_fields'     => [
+                'class'        => [
                     'field_type'  => 'input',
                     'type'        => 'text',
                     'name'        => 'class',

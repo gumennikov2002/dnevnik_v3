@@ -20,28 +20,31 @@
         <thead class="thead-custom">
             <tr>
                 @foreach($table_heads as $head_title)
-                    <td>{{ $head_title }}</td>
+                <td>{{ $head_title }}</td>
                 @endforeach
                 <td>Действия</td>
             </tr>
         </thead>
         <tbody>
             @foreach($table_body as $record)
-                <tr data-id={{ $record->id }}>
-                    @foreach($record as $row)
-                        <td>{{ $row }}</td>
-                    @endforeach
-                    <td>
-                        <ion-icon name="create" class="rowEdit text-primary" style="cursor: pointer; font-size:24px"></ion-icon>
-                        <ion-icon name="close-circle" data-bs-toggle="modal" data-bs-target="#warningModal" class="rowDelete text-danger" style="margin-left: 10px; cursor: pointer; font-size:24px"></ion-icon>
-                    </td>
-                </tr>
+            <tr data-id={{ $record->id }}>
+                @foreach(json_decode($record) as $row)
+                <td>{{ $row }}</td>
+                @endforeach
+                <td>
+                    <ion-icon name="create" class="rowEdit text-primary" style="cursor: pointer; font-size:24px"></ion-icon>
+                    <ion-icon name="close-circle" data-bs-toggle="modal" data-bs-target="#warningModal" class="rowDelete text-danger" style="margin-left: 10px; cursor: pointer; font-size:24px"></ion-icon>
+                </td>
+            </tr>
             @endforeach
         </tbody>
     </table>
     @if(empty($table_body))
-        <div class="text-center text-no-records animate__animated animate__zoomIn">Нет записей.</div>
+    <div class="text-center text-no-records animate__animated animate__zoomIn">Нет записей.</div>
     @endif
+    <div class="custom-paginate">
+        {{ $table_body->links() }}
+    </div>
 </div>
 
 <div class="modal fade" id="myModal" tabindex="-1">
@@ -53,28 +56,28 @@
             </div>
             <div class="modal-body">
                 @foreach($modal_fields as $field)
-                    @if($field['field_type'] == 'input')
-                        <input type='{{ $field['type'] }}' name='{{ $field['name'] }}' class="form-control mb-2 data-field" placeholder='{{ $field['placeholder'] }}'>
-                    @endif
-                    
-                    @if($field['field_type'] == 'textarea')
-                        <textarea placeholder='{{ $field['placeholder'] }}' name='{{ $field['name'] }}' cols="30" rows="10" class="data-field form-control mb-2"></textarea>
-                    @endif
+                @if($field['field_type'] == 'input')
+                <input type='{{ $field['type'] }}' name='{{ $field['name'] }}' class="form-control mb-2 data-field" placeholder='{{ $field['placeholder'] }}'>
+                @endif
 
-                    @if($field['field_type'] == 'select')
-                        @if (isset($field['options']['empty']))
-                            <select class="form-select mb-2 data-field" name='{{ $field['name'] }}' disabled>
-                        @else
-                            <select class="form-select mb-2 data-field" name='{{ $field['name'] }}'>
+                @if($field['field_type'] == 'textarea')
+                <textarea placeholder='{{ $field['placeholder'] }}' name='{{ $field['name'] }}' cols="30" rows="10" class="data-field form-control mb-2"></textarea>
+                @endif
+
+                @if($field['field_type'] == 'select')
+                @if (isset($field['options']['empty']))
+                <select class="form-select mb-2 data-field" name='{{ $field['name'] }}' disabled>
+                    @else
+                    <select class="form-select mb-2 data-field" name='{{ $field['name'] }}'>
                         @endif
-                            @foreach($field['options'] as $option)
-                                <option value='{{ $option['value'] }}'>{{ $option['label'] }}</option>
-                            @endforeach
-                        </select>
+                        @foreach($field['options'] as $option)
+                        <option value='{{ $option['value'] }}'>{{ $option['label'] }}</option>
+                        @endforeach
+                    </select>
                     @endif
-                @endforeach
+                    @endforeach
 
-                <div class="alert alert-danger errors hidden"></div>
+                    <div class="alert alert-danger errors hidden"></div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" id="cleanModal">Очистить</button>
@@ -85,21 +88,21 @@
 </div>
 
 <div class="modal fade" id="warningModal" tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Предупреждение</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
-      </div>
-      <div class="modal-body">
-        <p>Вы точно хотите удалить запись?</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="deleteAccept">Удалить</button>
-      </div>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Предупреждение</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+            </div>
+            <div class="modal-body">
+                <p>Вы точно хотите удалить запись?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="deleteAccept">Удалить</button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 <script>
     let modalFields = '<?= json_encode($modal_fields); ?>';
