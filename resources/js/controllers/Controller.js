@@ -1,9 +1,17 @@
+import { isNull } from 'lodash'
 import tippy from 'tippy.js'
 
 const { default: axios } = require("axios")
 
-const urlBase     = window.location.origin
-const urlPathname = window.location.pathname
+const urlBase      = window.location.origin
+const urlPathname  = window.location.pathname
+
+let urlCurrent  = urlBase + urlPathname + window.location.search
+let urlGetParams = null
+if (typeof urlCurrent.split('?')[1] !== 'undefined') {
+    urlGetParams = urlCurrent.split('?')[1].split('&')
+}
+
 
 axios.defaults.headers.post['X-CSRF-TOKEN'] = document.querySelector('input[name=_token]').value
 
@@ -119,33 +127,53 @@ function sidebarController() {
         }
 
         Object.keys(profile.profile_menu).forEach((index, value) => {
-            const dropdownMenu = document.querySelectorAll('.dropdown-menu')
+            const dropdownMenu = document.getElementsByClassName('sidebar-dropdown dropdown-menu')
             const menu         = profile.profile_menu
 
-            dropdownMenu.forEach((elem) => {
-                elem.insertAdjacentHTML('afterbegin', `<li><a class="dropdown-item" href="${menu[index].link}">${menu[index].title}</a></li>`)
-            })
+            for (let i = 0; i < dropdownMenu.length; i++) {
+                dropdownMenu[i].insertAdjacentHTML('afterbegin', `<li><a class="dropdown-item" href="${menu[index].link}">${menu[index].title}</a></li>`)
+            }
         })
 
         document.querySelector('#profile-pic').setAttribute('src', profile.profile_pic)
+
     })
 }
 
 function crudController() {
     modalFields = JSON.parse(modalFields)
-    const saveBtn      = document.querySelector('#modalSaveBtn')
-    const dataFields   = {}
-    const errorElement = document.querySelector('.errors')
-    const cleanBtn     = document.querySelector('#cleanModal')
-    const modal        = document.querySelector('#myModal')
-    const closeModal   = document.querySelector('#closeModal')
-    const openModal    = document.querySelector('#openModal')
-    const editModal    = document.querySelector('#editModal')
-    const crudTable    = document.querySelector('#crudTable')
-    const crudSearch   = document.querySelector('#crudSearch')
-    const goSearch     = document.querySelector('#goSearch')
-    const crudRefresh  = document.querySelector('#crudRefresh')
-    const modaTitle    = document.querySelector('.modal-title')
+    const saveBtn         = document.querySelector('#modalSaveBtn')
+    const dataFields      = {}
+    const errorElement    = document.querySelector('.errors')
+    const cleanBtn        = document.querySelector('#cleanModal')
+    const modal           = document.querySelector('#myModal')
+    const closeModal      = document.querySelector('#closeModal')
+    const openModal       = document.querySelector('#openModal')
+    const editModal       = document.querySelector('#editModal')
+    const crudTable       = document.querySelector('#crudTable')
+    const crudSearch      = document.querySelector('#crudSearch')
+    const goSearch        = document.querySelector('#goSearch')
+    const crudRefresh     = document.querySelector('#crudRefresh')
+    const modaTitle       = document.querySelector('.modal-title')
+    const pagination      = document.querySelector('.custom-paginate')
+
+    if (window.location.search === '') {
+        urlCurrent += "?page=1"
+    }
+
+    if (!isNull(urlGetParams)) {
+        const getParamSearch = urlGetParams[1]?.split('=')
+        if (typeof getParamSearch !== 'undefined') {
+    
+            crudSearch.value = decodeURI(getParamSearch[1])
+        }
+
+        paginationInit(document)
+    }
+
+    if (crudTable.querySelectorAll('.tbody tr').length === 0) {
+        textNoRecords('hide')
+    }
 
     tippy(openModal, {content: 'Добавить запись', animation: 'fade', hideOnClick: true, theme: 'custom'})
     tippy(crudRefresh, {content: 'Обновить таблицу', animation: 'fade', hideOnClick: true, theme: 'custom'})
@@ -161,6 +189,7 @@ function crudController() {
     /* Кнопка обновить таблицу | Update table button */
     crudRefresh.addEventListener('click', () => {
         crudSearch.value = ''
+        removeURLParameters(['page', 'search'])
         updateContent()
     })
 
@@ -209,7 +238,7 @@ function crudController() {
             })
         })
 
-        document.querySelector('.text-no-records').innerHTML = ''
+        textNoRecords('hide')
     })
 
     /* Отслеживание кликов динамических объектов | Dynamic objects click tracker */
@@ -270,26 +299,15 @@ function crudController() {
 
     /* Поиск по странице | Page search */
     goSearch.addEventListener('click', () => {
-        let ids = []
+        removeURLParameters(['search'])
+        updateContent(crudSearch.value)
+    })
 
-        axios.post(urlPathname + '/search', {'word': crudSearch.value})
-        .then((response) => {
-            Object.keys(response.data).forEach((index) => {
-                if (response.data[index].length > 0) {
-                    let recordIds = response.data[index]
-                    Object.keys(recordIds).forEach((i) => {
-                        ids.push(recordIds[i].id)
-                    })
-                }
-            })
-
-            updateContent(ids)
-        })
-
-        if (crudSearch.value === '' || crudSearch.value === ' ') {
-            updateContent()
+    crudSearch.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            removeURLParameters(['search'])
+            updateContent(crudSearch.value)
         }
-
     })
 
     /* Скрыть ошибки | Hide errors */
@@ -314,20 +332,89 @@ function crudController() {
     /* Обновить контент | Update content */
     function updateContent(search = null) {
         let urlConfig = urlPathname
+        let newUrl = ''
 
-        if (search !== null) {
-            urlConfig += '?ids=' + search
+        if (search) {
+            urlConfig += '?search=' + search
+            const parseCurrentUrl = urlCurrent.split('&')
+            const searchGetParam  = parseCurrentUrl[1]
+
+            if (typeof searchGetParam !== 'undefined') {
+                delete parseCurrentUrl[1]
+                urlCurrent = '?page=1'
+            }
+
+            newUrl = urlCurrent + `&search=${search}`
+
+            window.history.replaceState('', '', newUrl)
         }
 
         axios.get(urlConfig)
         .then((response) => {
             let parser = new DOMParser().parseFromString(response.data, 'text/html')
+            const parsedPagination = parser.querySelector('.custom-paginate nav')
+            
             crudTable.querySelector('tbody').innerHTML = ''
+
+            if (parser.querySelectorAll('#crudTable tbody tr').length > 0) {
+                textNoRecords('hide')
+            } else {
+                textNoRecords('show')
+            }
+
             Object.values(parser.querySelectorAll('#crudTable tbody tr')).forEach((elem) => {
                 elem.classList.add('animate__animated', 'animate__fadeIn')
                 crudTable.querySelector('tbody').append(elem)
             })
+            pagination.innerHTML = ''
+
+            pagination.append(parsedPagination)
+
+            if (isNull(parsedPagination)) {
+                pagination.innerHTML = ''
+            }
+
+            paginationInit(parsedPagination)
         })
+    }
+
+    function textNoRecords(action) {
+        const text = document.querySelector('.text-no-records')
+        if (action === 'show') {
+            text.classList.remove('hidden')
+        }
+
+        if (action === 'hide') {
+            text.classList.add('hidden')
+        }
+    }
+
+    function paginationInit(doc) {
+        const pageLinks  = doc.querySelectorAll('.page-link')
+
+        if (pageLinks.length === 0) {
+            return
+        }
+
+        const nextPage     = doc.querySelector(`[rel="next"]`)
+        const prevPage     = doc.querySelector(`[rel="prev"]`)
+        const activePage   = doc.querySelector('.active')
+        const nextPageNum  = Number(activePage.children[0].innerHTML) + 1
+        const prevPageNum  = Number(activePage.children[0].innerHTML) - 1
+        const activeParams = window.location.href.split('?')[1].split('&')
+        const searchParam  = typeof activeParams[1] !== 'undefined' ? '&' + activeParams[1] : ''
+
+        pageLinks.forEach((elem) => {
+            elem.href = urlBase + urlPathname + '?page=' + elem.innerHTML + searchParam
+        })
+
+        if (!isNull(nextPage)) {
+            nextPage.href = urlBase + urlPathname + '?page=' + nextPageNum + searchParam
+        }
+
+        if (!isNull(prevPage)) {
+            prevPage.href = urlBase + urlPathname + '?page=' + prevPageNum + searchParam
+        }
     }
 }
 
@@ -343,4 +430,15 @@ function profileController() {
     profilePicEditElement.addEventListener('mouseout', () => {
         profilePicEditElement.classList.add('hidden')
     })
+}
+
+/* Общие функции | Common functions */
+function removeURLParameters(removeParams) {
+    const deleteRegex = new RegExp(removeParams.join('=|') + '=')
+  
+    const params = location.search.slice(1).split('&')
+    let search = []
+    for (let i = 0; i < params.length; i++) if (deleteRegex.test(params[i]) === false) search.push(params[i])
+  
+    window.history.replaceState({}, document.title, location.pathname + (search.length ? '?' + search.join('&') : '') + location.hash)
 }

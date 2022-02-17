@@ -7,7 +7,7 @@
         <a href="#" class="d-flex align-items-center justify-content-center p-3 link-dark text-decoration-none dropdown-toggle" id="dropdownUser3" data-bs-toggle="dropdown" aria-expanded="false">
             <img src="images/default.png" width="24" height="24" class="rounded-circle" id="profile-pic">
         </a>
-        <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser3">
+        <ul class="sidebar-dropdown dropdown-menu text-small shadow" aria-labelledby="dropdownUser3">
             <li>
                 <hr class="dropdown-divider">
             </li>
@@ -35,7 +35,7 @@
                 <a href="#" class="d-flex mt-1 align-items-center justify-content-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser3" data-bs-toggle="dropdown" aria-expanded="false">
                     <img src="images/default.png" alt="mdo" width="32" height="32" class="rounded-circle" id="profile-pic">
                 </a>
-                <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser3">
+                <ul class="sidebar-dropdown dropdown-menu text-small shadow" aria-labelledby="dropdownUser3">
                     <li>
                         <hr class="dropdown-divider">
                     </li>

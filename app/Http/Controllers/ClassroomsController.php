@@ -14,12 +14,13 @@ class ClassroomsController extends CrudController
 
         $this->MODEL_NAME = 'App\Models\Classroom';
         $this->CONFIG = [
-            'title' => 'Классы',
-            'page_title'  => 'Классы',
-            'table_heads' => ['#', 'Класс', 'Классный руководитель'],
-            'table_body'  => [],
-            'modal_fields' => [
-                'class' => [
+            'title'            => 'Классы',
+            'page_title'       => 'Классы',
+            'table_heads'      => ['#', 'Класс', 'Классный руководитель'],
+            'table_body'       => [],
+            'table_filters'    => [],
+            'modal_fields'     => [
+                'class'        => [
                     'field_type'  => 'input',
                     'type'        => 'text',
                     'name'        => 'class',
@@ -44,17 +45,19 @@ class ClassroomsController extends CrudController
             ]
         ];
 
-        $classroom_teachers = User::where('role', 'Учитель')->orWhere('role', 'Классный руководитель')->get();
+        $teachers = User::where('role', 'Учитель')->orWhere('role', 'Классный руководитель')->get();
 
-        if (count($classroom_teachers) === 0) {
+        if (count($teachers) === 0) {
             $this->CONFIG['modal_fields']['teacher_id']['options'] = [
                 'empty' => [
                     'label' => 'Свободных учителей нет',
                     'value' => null
                 ]
             ];
-        } else {
-            foreach ($classroom_teachers as $key => $value) {
+        } 
+        
+        if (count($teachers) > 0){
+            foreach ($teachers as $key => $value) {
                 $this->CONFIG['modal_fields']['teacher_id']['options'][$key] = [
                     'label' => $value->full_name,
                     'value' => $value->id
@@ -86,7 +89,7 @@ class ClassroomsController extends CrudController
             $prev_user->update(['role' => 'Учитель']);
         }
         
-        $new_user = User::where('id', $request->teacher_id)->first()->update(['role' => 'Классный руководитель']);
+        User::where('id', $request->teacher_id)->first()->update(['role' => 'Классный руководитель']);
 
         $updates = $request->all();
         $record->update($updates);
