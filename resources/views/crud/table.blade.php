@@ -39,9 +39,9 @@
             @endforeach
         </tbody>
     </table>
-    @if(empty($table_body))
+
     <div class="text-center text-no-records animate__animated animate__zoomIn">Нет записей.</div>
-    @endif
+
     <div class="custom-paginate">
         {{ $table_body->links() }}
     </div>

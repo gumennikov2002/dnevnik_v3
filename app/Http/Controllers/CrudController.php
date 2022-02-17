@@ -17,53 +17,68 @@ class CrudController extends Controller
     }
 
     public function index(Request $request) {
-        $data = $this->CONFIG;
-        $get_ids = $request->get('ids');
-        $ids = explode(',', $get_ids);
-        $model_name = $this->MODEL_NAME;
-        $records = json_decode($model_name::whereIn('id', $ids)->get());
-        $all_records = json_decode($model_name::all());
+        $config = $this->CONFIG;
+        $model = $this->MODEL_NAME;
         $model_path = 'App\Models\\';
+        $paginate_count = 15;
+        $config['table_body'] = $model::paginate($paginate_count);
 
-        $data['table_body'] = $model_name::paginate(15);
+        unset($model);
+
+        if ($request->has('search')) {
+            unset($config['table_body']);
+            $model = $this->MODEL_NAME;
+            $model_path = 'App\Models\\';
+            $record = $model::where('id', '!=', null);
+            $search_word = $request->get('search');
+            $searchable_rows = array_keys($config['modal_fields']);
+            
+            for ($i = 0; $i < count($searchable_rows); $i++) {
+                if ($i == 0) {
+                    $record->where($searchable_rows[0], 'like', "%$search_word%");
+                }
+
+                if ($i > 0) {
+                    $record->orWhere($searchable_rows[$i], 'like', "%$search_word%");
+                }
+            }
+
+            $config['table_body'] = $record->paginate($paginate_count);
+
+            if (!empty($this->REFERENCES)) {
+                $reference_keys = array_keys($this->REFERENCES);
+                $ref_search_result_ids = [];
+                
+                foreach($reference_keys as $ref_key) {
+                    $ref_model = $model_path.$this->REFERENCES[$ref_key]['model'];
+                    $ref_get = $this->REFERENCES[$ref_key]['get'];
+                    $ref_search = $ref_model::select('id')->where($ref_get, 'like', "%$search_word%")->get();
+                    
+                    foreach($ref_search as $result) {
+                        $ref_search_result_ids[] = $result->id;
+                    }
+
+                    foreach($ref_search_result_ids as $key => $value) {
+                        $check = $model::where($ref_key, $value)->count();
+                        
+                        if ($check === 0) {
+                            unset($ref_search_result_ids[$key]);
+                        }
+                    }
+
+                    $config['table_body'] = $model::whereIn($ref_key, $ref_search_result_ids)->paginate($paginate_count);
+                }
+            }
+
+            
+            if (empty($config['table_body'])) {
+                $config['table_body'] = [];
+            }
+        }
+
+        !empty($this->REFERENCES) ? $this->references_run($config, $this->REFERENCES, $model_path) : null;
         
-        if (!empty($this->REFERENCES)) {
-            foreach ($all_records as $index => $record) {
-                $references = $this->REFERENCES;
-                $reference_keys = array_keys($references);
-                
-                foreach ($reference_keys as $key) {
-                    $model = $model_path.$references[$key]['model'];
-                    $need_get = $references[$key]['get'];
-                    $get = $model::where('id', $all_records[$index]->$key)->first();
-                    $all_records[$index]->$key = $get->$need_get;
-                }
-            }
-        }
-
-        if ($request->has('ids') && !empty($this->REFERENCES)) {
-            foreach ($records as $index => $record) {
-                $references = $this->REFERENCES;
-                $reference_keys = array_keys($references);
-                
-                foreach ($reference_keys as $key) {
-                    $model = $model_path.$references[$key]['model'];
-                    $need_get = $references[$key]['get'];
-                    $get = $model::where('id', $records[$index]->$key)->first();
-                    $records[$index]->$key = $get->$need_get;
-                }
-            }
-        }
-
-        if ($get_ids !== null) {
-            $data['table_body'] = $model_name::whereIn('id', $ids)->paginate(15);
-
-            if (empty($records)) {
-                $data['table_body'] = [];
-            }
-        }
-
-        return view('crud.table', $data);
+        return view('crud.table', $config);
     }
 
     public function create(Request $request) {
@@ -98,32 +113,16 @@ class CrudController extends Controller
         }
     }
 
-    public function search(Request $request) {
-        $record = $this->MODEL_NAME;
-        $search = [];
-        $fields_config = array_keys($this->CONFIG['modal_fields']);
-
-        foreach ($fields_config as $field) {
-            $search[$field] = $record::select('id')->where($field, 'like', '%'.$request->word.'%')->get();
-            if (!empty($this->REFERENCES)) {
-                $references = $this->REFERENCES;
-                $reference_keys = array_keys($references);
-                
-                foreach($reference_keys as $reference_key) {
-                    foreach($references as $reference) {
-                        $table = strtolower(explode('\\', $this->MODEL_NAME)[2]).'s';
-                        $reference_table = strtolower($reference['model']).'s';
-                        $search[$field] = $record::join($reference_table, $table.'.'.$reference_key, $reference_table.'.id')
-                                            ->where($field, 'like', '%'.$request->word.'%')
-                                            ->orWhere($reference['get'], 'like', '%'.$request->word.'%')
-                                            ->get([$table.'.*', $reference_table.'.'.$reference['get']]);
-                    }
-                }
+    protected function references_run($config, $references, $model_path) {
+        foreach ($config['table_body'] as $index => $record) {
+            $reference_keys = array_keys($references);
+            
+            foreach ($reference_keys as $key) {
+                $model = $model_path.$references[$key]['model'];
+                $need_get = $references[$key]['get'];
+                $get = $model::where('id', $config['table_body'][$index]->$key)->first();
+                $config['table_body'][$index]->$key = $get->$need_get;
             }
-        }
-
-        if ($search) {
-            return response($search);
         }
     }
 }
