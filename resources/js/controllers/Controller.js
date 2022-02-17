@@ -24,16 +24,50 @@ function routeManager() {
 }
 
 function authController() {
-    const form      = document.querySelector('#auth')
-    const password  = form.querySelector(`input[name='password']`)
-    const button    = form.querySelector(`button[name='save']`)
-    const textError = form.querySelector('.text-danger')
+    const form        = document.querySelector('#auth')
+    const password    = form.querySelector(`input[name='password']`)
+    const button      = form.querySelector(`button[name='save']`)
+    const textError   = form.querySelector('.text-danger')
+    const body        = document.querySelector('body')
+    const loginWindow = document.querySelector('.window')
 
     let phone = form.querySelector(`input[name='phone']`)
 
     let checkFields = {
         'phone': 0,
         'password': 0
+    }
+
+    let season = seasonDetector()
+
+    if (season === 'Winter') {
+        body.classList.remove('spring-bg')
+        body.classList.remove('autumn-bg')
+        body.classList.add('winter-bg')
+
+        loginWindow.classList.remove('spring')
+        loginWindow.classList.remove('autumn')
+        loginWindow.classList.add('winter')
+    }
+
+    if (season === 'Spring') {
+        body.classList.add('spring-bg')
+        body.classList.remove('autumn-bg')
+        body.classList.remove('winter-bg')
+
+        loginWindow.classList.add('spring')
+        loginWindow.classList.remove('autumn')
+        loginWindow.classList.remove('winter')
+    }
+
+    if (season === 'Autumn') {
+        body.classList.remove('spring-bg')
+        body.classList.add('autumn-bg')
+        body.classList.remove('winter-bg')
+
+        loginWindow.classList.remove('spring')
+        loginWindow.classList.add('autumn')
+        loginWindow.classList.remove('winter')
     }
 
     function disableEnableButton(action) {
@@ -77,6 +111,26 @@ function authController() {
             textError.append('Неверный логин или пароль')
         })
     })
+
+    function seasonDetector() {
+        let now = new Date()
+        let month = now.getMonth() + 1
+        let season = null
+        
+        if (2 >= month >= 1 || month === 12) {
+            season = 'Winter'
+        }
+
+        if (month >= 3 && month <= 5) {
+            season = 'Spring'
+        }
+
+        if (month >= 6 && month < 12) {
+            season = 'Autumn'
+        }
+
+        return season
+    }
 }
 
 function sidebarController() {

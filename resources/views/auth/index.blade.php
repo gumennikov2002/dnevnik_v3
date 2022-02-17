@@ -7,7 +7,6 @@
         <div id="auth" class="row align-items-center pt-5" style="height:100vh">
             <div class="col-lg-4 col-md-2 col-sm-1"></div>
             <div class="col-lg-4 col-md-8 col-sm-10 window">
-                <img src="images/snow.png" class="snow" ondragstart="return false;">
                 <div class="text-center mb-5 mt-5">
                     <img class="mb-2" src="images/logo-w.png" width="64px">
                     <h4 class="text-light mt-2">Авторизация</h4>
