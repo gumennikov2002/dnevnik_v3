@@ -22,6 +22,9 @@
                 @foreach($table_heads as $head_title)
                 <td>{{ $head_title }}</td>
                 @endforeach
+                @if(isset($table_link))
+                <td>Ссылка</td>
+                @endif
                 <td>Действия</td>
             </tr>
         </thead>
@@ -31,6 +34,9 @@
                 @foreach(json_decode($record) as $row)
                 <td>{{ $row }}</td>
                 @endforeach
+                @if(isset($table_link))
+                <td><a href="{{ $table_link.$record->id }}">Перейти</a></td>
+                @endif
                 <td>
                     <ion-icon name="create" class="rowEdit text-primary" style="cursor: pointer; font-size:24px"></ion-icon>
                     <ion-icon name="close-circle" data-bs-toggle="modal" data-bs-target="#warningModal" class="rowDelete text-danger" style="margin-left: 10px; cursor: pointer; font-size:24px"></ion-icon>
@@ -56,12 +62,18 @@
             </div>
             <div class="modal-body">
                 @foreach($modal_fields as $field)
+                @if($field['field_type'] == 'text')
+                <div class="mb-2">
+                    <b>{{ $field['text'] }}:</b> {{ $field['value'] }}
+                </div>
+                @endif
+
                 @if($field['field_type'] == 'input')
-                <input type='{{ $field['type'] }}' name='{{ $field['name'] }}' class="form-control mb-2 data-field" placeholder='{{ $field['placeholder'] }}'>
+                <input type='{{ $field['type'] }}'  value='{{ isset($field['value']) ? $field['value'] : null }}' name='{{ $field['name'] }}' class="form-control mb-2 data-field {{ isset($field['hidden']) && $field['hidden'] ? 'hidden' : null }}" placeholder='{{ $field['placeholder'] }}'>
                 @endif
 
                 @if($field['field_type'] == 'textarea')
-                <textarea placeholder='{{ $field['placeholder'] }}' name='{{ $field['name'] }}' cols="30" rows="10" class="data-field form-control mb-2"></textarea>
+                <textarea placeholder='{{ $field['placeholder'] }}' name='{{ $field['name'] }}' cols="30" rows="10" class="data-field form-control mb-2 {{ isset($field['hidden']) && $field['hidden'] ? 'hidden' : null }}"></textarea>
                 @endif
 
                 @if($field['field_type'] == 'select')

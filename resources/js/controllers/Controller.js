@@ -1,4 +1,4 @@
-import { isNull } from 'lodash'
+import { has, isNull } from 'lodash'
 import tippy from 'tippy.js'
 
 const { default: axios } = require("axios")
@@ -8,8 +8,16 @@ const urlPathname  = window.location.pathname
 
 let urlCurrent  = urlBase + urlPathname + window.location.search
 let urlGetParams = null
+let urlGetFilters = new Map()
+
 if (typeof urlCurrent.split('?')[1] !== 'undefined') {
     urlGetParams = urlCurrent.split('?')[1].split('&')
+
+    urlGetParams.forEach((get_param) => {
+        let key = get_param.split('=')[0];
+        let value = get_param.split('=')[1]
+        urlGetFilters.set(key, value)
+    })
 }
 
 
@@ -210,16 +218,25 @@ function crudController() {
     const crudRefresh     = document.querySelector('#crudRefresh')
     const modaTitle       = document.querySelector('.modal-title')
     const pagination      = document.querySelector('.custom-paginate')
+    const activeUrl       = window.location.href.split('?')[1]?.split('&')
+    let activeParams = new Map()
+
+    if (typeof activeUrl !== 'undefined') {
+        activeUrl.forEach((get_param) => {
+            let key = get_param.split('=')[0];
+            let value = get_param.split('=')[1]
+            activeParams.set(key, value)
+        })
+    }
 
     if (window.location.search === '') {
         urlCurrent += "?page=1"
     }
 
     if (!isNull(urlGetParams)) {
-        const getParamSearch = urlGetParams[1]?.split('=')
-        if (typeof getParamSearch !== 'undefined') {
+        if (typeof urlGetFilters.get('search') !== 'undefined') {
     
-            crudSearch.value = decodeURI(getParamSearch[1])
+            crudSearch.value = decodeURI(urlGetFilters.get('search'))
         }
 
         paginationInit(document)
@@ -243,7 +260,7 @@ function crudController() {
     /* Кнопка обновить таблицу | Update table button */
     crudRefresh.addEventListener('click', () => {
         crudSearch.value = ''
-        removeURLParameters(['page', 'search'])
+        removeURLParameters(['search', 'page'])
         updateContent()
     })
 
@@ -266,7 +283,12 @@ function crudController() {
         let url = null
 
         Object.keys(modalFields).forEach((index, value) => {
+            if (document.querySelector(`[name=${index}]`).classList.contains('hidden') && document.querySelector(`[name=${index}]`).value == '') {
+                document.querySelector(`[name=${index}]`).value = document.querySelector(`[name=${index}]`).getAttribute('value')
+            }
+
             dataFields[index] = document.querySelector(`[name=${index}]`).value
+
             url = urlPathname + '/create'
 
             if (modal.querySelector(`input[name='id']`)) {
@@ -354,12 +376,18 @@ function crudController() {
     /* Поиск по странице | Page search */
     goSearch.addEventListener('click', () => {
         removeURLParameters(['search'])
+        if (isEmptyString(crudSearch.value)) {
+            removeURLParameters(['page'])
+        }
         updateContent(crudSearch.value)
     })
 
     crudSearch.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
             removeURLParameters(['search'])
+            if (isEmptyString(crudSearch.value)) {
+                removeURLParameters(['page'])
+            }
             updateContent(crudSearch.value)
         }
     })
@@ -371,36 +399,59 @@ function crudController() {
     }
 
     /* Очистить поля в модальном окне | Clean modal fields */
+    // console.log(modalFields)
     function cleanModal() {
         hideErrors()
         Object.keys(modalFields).forEach((index) => {
-            const field = document.querySelector(`[name=${index}]`)
-            field.value = ''
-
-            if (field.tagName == 'SELECT') {
-                field.options[0].selected = true
+            if (modalFields[index].field_type === 'text') {
+                delete modalFields[index]
             }
+
+            const field = document.querySelector(`[name=${index}]`)
+
+            if (!isNull(field)) {
+                field.value = ''
+
+                if (field.tagName == 'SELECT') {
+                    field.options[0].selected = true
+                }
+            }
+
         })
     }
 
     /* Обновить контент | Update content */
     function updateContent(search = null) {
         let urlConfig = urlPathname
-        let newUrl = ''
+        let filters = ''
 
         if (search) {
             urlConfig += '?search=' + search
-            const parseCurrentUrl = urlCurrent.split('&')
-            const searchGetParam  = parseCurrentUrl[1]
 
-            if (typeof searchGetParam !== 'undefined') {
-                delete parseCurrentUrl[1]
-                urlCurrent = '?page=1'
+            
+            if (activeParams.has('search')) {
+                activeParams.delete('search')
+            }
+            
+            if (activeParams.has('page')) {
+                activeParams.delete('page')
             }
 
-            newUrl = urlCurrent + `&search=${search}`
+            activeParams.set('search', search)
 
-            window.history.replaceState('', '', newUrl)
+            for (let key of activeParams) {
+                filters += '&' + key[0] + '=' + key[1]
+            }
+
+            window.history.replaceState('', '', urlBase + urlPathname + '?page=1' + filters)
+        }
+
+        if (urlPathname === '/class_crud') {
+            if (activeParams.has('page') || activeParams.has('search')) {
+                urlConfig += '&class_id=' + activeParams.get('class_id')
+            } else {
+                urlConfig += '?class_id=' + activeParams.get('class_id')
+            }
         }
 
         axios.get(urlConfig)
@@ -449,14 +500,13 @@ function crudController() {
         if (pageLinks.length === 0) {
             return
         }
-
         const nextPage     = doc.querySelector(`[rel="next"]`)
         const prevPage     = doc.querySelector(`[rel="prev"]`)
         const activePage   = doc.querySelector('.active')
         const nextPageNum  = Number(activePage.children[0].innerHTML) + 1
         const prevPageNum  = Number(activePage.children[0].innerHTML) - 1
-        const activeParams = window.location.href.split('?')[1].split('&')
-        const searchParam  = typeof activeParams[1] !== 'undefined' ? '&' + activeParams[1] : ''
+        
+        const searchParam  = activeParams.has('search') ? '&search=' + activeParams.get('search') : ''
 
         pageLinks.forEach((elem) => {
             elem.href = urlBase + urlPathname + '?page=' + elem.innerHTML + searchParam
@@ -496,3 +546,10 @@ function removeURLParameters(removeParams) {
   
     window.history.replaceState({}, document.title, location.pathname + (search.length ? '?' + search.join('&') : '') + location.hash)
 }
+
+function isEmptyString(str) {
+    if (str.trim() == '') 
+      return true;
+      
+    return false;
+  }

@@ -18,7 +18,6 @@ class ClassroomsController extends CrudController
             'page_title'       => 'Классы',
             'table_heads'      => ['#', 'Класс', 'Классный руководитель'],
             'table_body'       => [],
-            'table_filters'    => [],
             'modal_fields'     => [
                 'class'        => [
                     'field_type'  => 'input',
@@ -44,6 +43,7 @@ class ClassroomsController extends CrudController
                 'get'   => 'full_name'
             ]
         ];
+        $this->TABLE_LINK = route('class').'?page=1&class_id=';
 
         $teachers = User::where('role', 'Учитель')->orWhere('role', 'Классный руководитель')->get();
 

@@ -10,6 +10,7 @@ class CrudController extends Controller
     public const CONFIG     = [];
     public const VALIDATE   = [];
     public const REFERENCES = [];
+    public const TABLE_LINK = '';
 
     public function __construct()
     {
@@ -33,6 +34,14 @@ class CrudController extends Controller
             $search_word = $request->get('search');
             $searchable_rows = array_keys($config['modal_fields']);
             
+            for ($i = 0; $i < count($searchable_rows); $i++) {
+                if ($config['modal_fields'][$searchable_rows[$i]]['field_type'] === 'text') {
+                    unset($searchable_rows[$i]);
+                }
+            }
+
+            $searchable_rows = array_values($searchable_rows);
+
             for ($i = 0; $i < count($searchable_rows); $i++) {
                 if ($i == 0) {
                     $record->where($searchable_rows[0], 'like', "%$search_word%");
@@ -76,7 +85,13 @@ class CrudController extends Controller
             }
         }
 
-        !empty($this->REFERENCES) ? $this->references_run($config, $this->REFERENCES, $model_path) : null;
+        if (!empty($this->REFERENCES)) {
+            $this->references_run($config, $this->REFERENCES, $model_path);
+        }
+
+        if (isset($this->TABLE_LINK)) {
+            $config['table_link'] = $this->TABLE_LINK;
+        }
         
         return view('crud.table', $config);
     }
