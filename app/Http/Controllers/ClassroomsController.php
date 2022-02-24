@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Classes;
 use App\Models\Classroom;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -10,40 +11,8 @@ class ClassroomsController extends CrudController
 {
     public function __construct()
     {
-        parent::__construct();
-
         $this->MODEL_NAME = 'App\Models\Classroom';
-        $this->CONFIG = [
-            'title'            => 'Классы',
-            'page_title'       => 'Классы',
-            'table_heads'      => ['#', 'Класс', 'Классный руководитель'],
-            'table_body'       => [],
-            'modal_fields'     => [
-                'class'        => [
-                    'field_type'  => 'input',
-                    'type'        => 'text',
-                    'name'        => 'class',
-                    'placeholder' => 'Класс'
-                ],
-                'teacher_id' => [
-                    'field_type'  => 'select',
-                    'name'        => 'teacher_id',
-                    'placeholder' => 'Классный руководитель',
-                    'options'     => []
-                ]
-            ]
-        ];
-        $this->VALIDATE = [
-            'class'      => 'required|unique:classrooms',
-            'teacher_id' => 'required|integer'
-        ];
-        $this->REFERENCES = [
-            'teacher_id' => [
-                'model' => 'User',
-                'get'   => 'full_name'
-            ]
-        ];
-        $this->TABLE_LINK = route('class').'?page=1&class_id=';
+        parent::__construct();
 
         $teachers = User::where('role', 'Учитель')->orWhere('role', 'Классный руководитель')->get();
 
@@ -82,14 +51,14 @@ class ClassroomsController extends CrudController
     public function update(Request $request) {
         $record = $this->MODEL_NAME::find($request->id);
 
-        $prev_user = User::find($record->teacher_id)->first();
+        $prev_user = User::where('id', $record->teacher_id)->first();
         $prev_user_classrooms_count = $this->MODEL_NAME::where('teacher_id', $prev_user->id)->count();
 
         if ($prev_user_classrooms_count <= 1) {
-            $prev_user->update(['role' => 'Учитель']);
-        }
-        
-        User::where('id', $request->teacher_id)->first()->update(['role' => 'Классный руководитель']);
+             $prev_user->update(['role' => 'Учитель']);
+         }
+
+         User::where('id', $request->teacher_id)->first()->update(['role' => 'Классный руководитель']);
 
         $updates = $request->all();
         $record->update($updates);
@@ -108,6 +77,7 @@ class ClassroomsController extends CrudController
             $user->update(['role' => 'Учитель']);
         }
 
+        Classes::where('classroom_id', $record->id)->delete();
         $this->MODEL_NAME::destroy($request->input('id'));
     }
 }

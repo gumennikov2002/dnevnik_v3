@@ -14,7 +14,17 @@ class CrudController extends Controller
 
     public function __construct()
     {
+        $init = $this->MODEL_NAME::init_config();
+        $this->CONFIG = $init['config'];
+        $this->VALIDATE = $init['validate'];
+        
+        if (isset($init['references'])) {
+            $this->REFERENCES = $init['references'];
+        }
 
+        if (isset($init['table_link'])) {
+            $this->TABLE_LINK = $init['table_link'];
+        }
     }
 
     public function index(Request $request) {

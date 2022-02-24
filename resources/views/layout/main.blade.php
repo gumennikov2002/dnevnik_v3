@@ -22,6 +22,7 @@
         <div class="col-sm-10 mt-2">
             <div class="container">
                 <h2 class="mt-2 z-top">@yield('page_title')</h2>
+                <span class="mt-2 z-top">@yield('page_subtitle')</span>
             </div>
 
             <div class="spacer"></div>

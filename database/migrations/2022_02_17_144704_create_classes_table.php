@@ -17,7 +17,6 @@ class CreateClassesTable extends Migration
             $table->id();
             $table->integer('classroom_id');
             $table->integer('user_id')->nullable(true);
-            $table->integer('teacher_id');
         });
     }
 

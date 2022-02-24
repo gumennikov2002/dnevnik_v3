@@ -1,6 +1,9 @@
 @extends('layout.main')
 @section('title', $title)
 @section('page_title', $page_title)
+@if(isset($page_subtitle))
+@section('page_subtitle', $page_subtitle)
+@endif
 @section('content')
 
 <div class="d-flex justify-content-between" id="crudTemplate">
@@ -38,8 +41,8 @@
                 <td><a href="{{ $table_link.$record->id }}">Перейти</a></td>
                 @endif
                 <td>
-                    <ion-icon name="create" class="rowEdit text-primary" style="cursor: pointer; font-size:24px"></ion-icon>
-                    <ion-icon name="close-circle" data-bs-toggle="modal" data-bs-target="#warningModal" class="rowDelete text-danger" style="margin-left: 10px; cursor: pointer; font-size:24px"></ion-icon>
+                    <ion-icon name="create" class="rowEdit text-primary {{ isset($hide_actions) && $hide_actions['edit'] ? 'hidden' : '' }}" style="cursor: pointer; font-size:24px"></ion-icon>
+                    <ion-icon name="close-circle" data-bs-toggle="modal" data-bs-target="#warningModal" class="rowDelete text-danger {{ isset($hide_actions) && $hide_actions['delete'] ? 'hidden' : '' }}" style="margin-left: 10px; cursor: pointer; font-size:24px"></ion-icon>
                 </td>
             </tr>
             @endforeach

@@ -261,6 +261,7 @@ function crudController() {
     crudRefresh.addEventListener('click', () => {
         crudSearch.value = ''
         removeURLParameters(['search', 'page'])
+        activeParams.delete('search')
         updateContent()
     })
 
@@ -378,6 +379,7 @@ function crudController() {
         removeURLParameters(['search'])
         if (isEmptyString(crudSearch.value)) {
             removeURLParameters(['page'])
+            activeParams.delete('search')
         }
         updateContent(crudSearch.value)
     })
@@ -387,6 +389,7 @@ function crudController() {
             removeURLParameters(['search'])
             if (isEmptyString(crudSearch.value)) {
                 removeURLParameters(['page'])
+                activeParams.delete('search')
             }
             updateContent(crudSearch.value)
         }
@@ -447,11 +450,8 @@ function crudController() {
         }
 
         if (urlPathname === '/class_crud') {
-            if (activeParams.has('page') || activeParams.has('search')) {
-                urlConfig += '&class_id=' + activeParams.get('class_id')
-            } else {
-                urlConfig += '?class_id=' + activeParams.get('class_id')
-            }
+            let sign = activeParams.has('search') ? '&' : '?'
+            urlConfig += sign + 'class_id=' + activeParams.get('class_id')
         }
 
         axios.get(urlConfig)

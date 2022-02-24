@@ -14,4 +14,39 @@ class Subject extends Model
         'name',
         'teacher_id'
     ];
+
+    protected static function init_config() {
+        return [
+            'config'     => [
+                'title'         => 'Предметы',
+                'page_title'    => 'Предметы',
+                'table_heads'   => ['#', 'Название', 'Преподаватель'],
+                'table_body'    => [],
+                'modal_fields'  => [
+                    'name'     => [
+                        'field_type'  => 'input',
+                        'type'        => 'text',
+                        'name'        => 'name',
+                        'placeholder' => 'Название предмета'
+                    ],
+                    'teacher_id' => [
+                        'field_type'  => 'select',
+                        'name'        => 'teacher_id',
+                        'placeholder' => 'Преподаватель',
+                        'options'     => []
+                    ]
+                ]
+            ],
+            'validate'   => [
+                'name'      => 'required',
+                'teacher_id' => 'required|integer'
+            ],
+            'references' => [
+                'teacher_id' => [
+                    'model' => 'User',
+                    'get'   => 'full_name'
+                ]
+            ]
+        ];
+    }
 }
