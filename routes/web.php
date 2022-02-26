@@ -6,9 +6,11 @@ use App\Http\Controllers\ClassesController;
 use App\Http\Controllers\CrudController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ClassroomsController;
+use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\SidebarController;
 use App\Http\Controllers\SubjectsController;
 use App\Http\Controllers\UsersController;
+use App\Models\Schedule;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -42,33 +44,30 @@ Route::group(['middleware' => 'AuthCheck'], function() {
     Route::post('users_crud/delete', [UsersController::class, 'delete'])->name('users.delete');
     Route::post('users_crud/get_fields', [UsersController::class, 'get_fields'])->name('users.get_fields');
     Route::post('users_crud/update', [UsersController::class, 'update'])->name('users.update');
-    Route::post('users_crud/search', [UsersController::class, 'search'])->name('users.search');
 
     Route::get('classrooms_crud', [ClassroomsController::class, 'index'])->name('classrooms');
     Route::post('classrooms_crud/create', [ClassroomsController::class, 'create'])->name('classrooms.create');
     Route::post('classrooms_crud/delete', [ClassroomsController::class, 'delete'])->name('classrooms.delete');
     Route::post('classrooms_crud/get_fields', [ClassroomsController::class, 'get_fields'])->name('classrooms.get_fields');
     Route::post('classrooms_crud/update', [ClassroomsController::class, 'update'])->name('classrooms.update');
-    Route::post('classrooms_crud/search', [ClassroomsController::class, 'search'])->name('classrooms.search');
 
     Route::get('class_crud', [ClassesController::class, 'index'])->name('class');
     Route::post('class_crud/create', [ClassesController::class, 'create'])->name('class.create');
     Route::post('class_crud/delete', [ClassesController::class, 'delete'])->name('class.delete');
     Route::post('class_crud/get_fields', [ClassesController::class, 'get_fields'])->name('class.get_fields');
     Route::post('class_crud/update', [ClassesController::class, 'update'])->name('class.update');
-    Route::post('class_crud/search', [ClassesController::class, 'search'])->name('class.search');
 
     Route::get('subjects_crud', [SubjectsController::class, 'index'])->name('subjects');
     Route::post('subjects_crud/create', [SubjectsController::class, 'create'])->name('subjects.create');
     Route::post('subjects_crud/delete', [SubjectsController::class, 'delete'])->name('subjects.delete');
     Route::post('subjects_crud/get_fields', [SubjectsController::class, 'get_fields'])->name('subjects.get_fields');
     Route::post('subjects_crud/update', [SubjectsController::class, 'update'])->name('subjects.update');
-    Route::post('subjects_crud/search', [SubjectsController::class, 'search'])->name('subjects.search');
     
     Route::get('cabinets_crud', [CabinetController::class, 'index'])->name('cabinets');
     Route::post('cabinets_crud/create', [CabinetController::class, 'create'])->name('cabinets.create');
     Route::post('cabinets_crud/delete', [CabinetController::class, 'delete'])->name('cabinets.delete');
     Route::post('cabinets_crud/get_fields', [CabinetController::class, 'get_fields'])->name('cabinets.get_fields');
     Route::post('cabinets_crud/update', [CabinetController::class, 'update'])->name('cabinets.update');
-    Route::post('cabinets_crud/search', [CabinetController::class, 'search'])->name('cabinets.search');
+
+    Route::get('schedule', [ScheduleController::class, 'index'])->name('schedule');
 });

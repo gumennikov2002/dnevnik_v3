@@ -16,11 +16,11 @@ class CreateScheduleTable extends Migration
         Schema::create('schedule', function (Blueprint $table) {
             $table->id();
             $table->integer('classroom_id');
-            $table->integer('teacher_id');
-            $table->date('date');
+            $table->integer('subject_id');
             $table->string('from_time');
             $table->string('to_time');
             $table->integer('cabinet_id');
+            $table->integer('day_of_week');
         });
     }
 

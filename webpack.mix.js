@@ -12,4 +12,5 @@ const mix = require('laravel-mix');
  */
 
  mix.js('resources/js/controllers/Controller.js', 'public/js/Controller.js');
+ mix.js('resources/js/controllers/ScheduleController.js', 'public/js/ScheduleController.js');
  mix.postCss('resources/css/app.css', 'public/css/app.css');

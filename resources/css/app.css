@@ -310,6 +310,16 @@ h1, h2, h3, h4, h5 {
     border-right-color: var(--active-color);
 }
 
+#schedule .card {
+    width: 49%;
+    margin-bottom: 60px;
+}
+
+#schedule .card .card-header {
+    background: var(--primary-color);
+    color: #fff;
+}
+
 @media screen and (max-width: 1500px) {
     .top-bar h2 {
         margin-left: 60px;

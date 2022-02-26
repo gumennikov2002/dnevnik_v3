@@ -24,7 +24,7 @@ class SidebarController extends Controller
 
         $this->MENU = [
             'schedule' => [
-                'url'   => '/schedule_crud',
+                'url'   => '/schedule',
                 'icon'  => 'calendar',
                 'title' => 'Расписание',
                 'class' => 'schedule',
