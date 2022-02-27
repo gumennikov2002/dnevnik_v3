@@ -61,6 +61,7 @@ Route::group(['middleware' => 'AuthCheck'], function() {
     Route::post('subjects_crud/create', [SubjectsController::class, 'create'])->name('subjects.create');
     Route::post('subjects_crud/delete', [SubjectsController::class, 'delete'])->name('subjects.delete');
     Route::post('subjects_crud/get_fields', [SubjectsController::class, 'get_fields'])->name('subjects.get_fields');
+    Route::post('subjects_crud/get_subjects', [SubjectsController::class, 'get_subjects'])->name('subjects.get_subjects');
     Route::post('subjects_crud/update', [SubjectsController::class, 'update'])->name('subjects.update');
     
     Route::get('cabinets_crud', [CabinetController::class, 'index'])->name('cabinets');
@@ -70,4 +71,5 @@ Route::group(['middleware' => 'AuthCheck'], function() {
     Route::post('cabinets_crud/update', [CabinetController::class, 'update'])->name('cabinets.update');
 
     Route::get('schedule', [ScheduleController::class, 'index'])->name('schedule');
+    Route::post('schedule/get_modal_fields', [ScheduleController::class, 'get_modal_fields'])->name('schedule.get_modal_fields');
 });

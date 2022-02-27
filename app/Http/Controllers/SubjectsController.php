@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Subject;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -31,5 +32,9 @@ class SubjectsController extends CrudController
                 ];
             }
         }
+    }
+
+    public function get_subjects() {
+        return Subject::all();
     }
 }
