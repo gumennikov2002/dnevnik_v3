@@ -403,7 +403,6 @@ function crudController() {
     }
 
     /* Очистить поля в модальном окне | Clean modal fields */
-    // console.log(modalFields)
     function cleanModal() {
         hideErrors()
         Object.keys(modalFields).forEach((index) => {
@@ -538,12 +537,31 @@ function profileController() {
 }
 
 function scheduleController() {
-    drawSchedule()
-    drawModal()
+    const chooseClassroom = document.querySelector('#classroomsChooseDataList')
+
+    if (urlGetFilters.has('classroom_id')) {
+        const currentClass = document.querySelector(`#classroomsChooseDataListOptions [data-value="${urlGetFilters.get('classroom_id')}"]`)
+        chooseClassroom.value = currentClass.value
+        drawModal()
+    }
+
+    chooseClassroom.addEventListener('input', () => {
+        let selectedClassroom = getDataListSelectedOption('classroomsChooseDataList', 'classroomsChooseDataListOptions')
+
+        if (typeof selectedClassroom !== 'undefined') {
+            window.history.replaceState('', '', urlBase + urlPathname + '?classroom_id=' + selectedClassroom)
+        }
+
+        softReload()
+    })
 
     function drawModal() {
-        const modalBody      = document.querySelector('.modal-body')
-        const addModalButton = document.querySelectorAll('.rowAdd')
+        const modalBody         = document.querySelector('.modal-body')
+        const openModalButton   = document.querySelectorAll('.rowAdd')
+        const closeModal        = document.querySelectorAll('[data-bs-dismiss="modal"]')
+        const saveModal         = document.querySelector('#saveModal')
+        const acceptDelete      = document.querySelector('#acceptDelete')
+
         const modalFields    = {
             'subject': {
                 'searchable': true,
@@ -600,6 +618,86 @@ function scheduleController() {
             }
         })
 
+        loadModalFieldsOptions()
+
+        let dayNum = document.querySelector('#dayNum')
+        let recordId = document.querySelector('#recordId')
+        
+        document.addEventListener('click', (e) => {
+            if (e.target && e.target.classList.contains('rowAdd')) {
+                dayNum.value = e.target.getAttribute('data-day')
+                recordId.value = ''
+            }
+            if (e.target && e.target.classList.contains('rowDelete')) {
+                acceptDelete.setAttribute('data-id', e.target.getAttribute('data-record-id'))
+            }
+
+            if (e.target && e.target.classList.contains('rowEdit')) {
+                dayNum.value = e.target.getAttribute('data-day')
+                recordId.value = e.target.getAttribute('data-record-id')
+                if (recordId.value !== '') {
+                    axios.post(urlBase + urlPathname + '/get_record', {'id': recordId.value})
+                    .then((response) => {
+                        let data = response.data
+                        delete data['id']
+                        delete data['day']
+
+                        Object.keys(data).forEach((index) => {
+
+                            let elemId = '#' + index.split('_')[0] + 'sDataList'
+
+                            if (index === 'from_time' || index == 'to_time') {
+                                elemId = '#' + index + 'Field'
+                                document.querySelector(elemId).value = data[index]
+                            }
+ 
+                            let field = document.querySelector(elemId)
+                            let dataList = document.querySelector(elemId + 'Options')
+                            let selectedElem = null
+                            if (!isNull(dataList)) {
+                                selectedElem = dataList.querySelector(`option[data-value="${data[index]}"]`)
+                                field.value = selectedElem.value
+                            }
+                        })
+                    })
+                }
+            }
+        })
+
+
+        closeModal.forEach((elem) => {
+            elem.addEventListener('click', () => {
+                modalBody.querySelectorAll('input').forEach((input) => {
+                    input.value = ''
+                })
+                modalBody.querySelectorAll('.errors').forEach((error) => {
+                    error.parentNode.removeChild(error);
+                })
+            })
+        })
+
+        saveModal.addEventListener('click', () => {
+            saveItemToSchedule({
+                'id': recordId.value !== '' ? recordId.value : null, 
+                'classroom_id': window.location.search.split('=')[1],
+                'subject_id': getDataListSelectedOption('subjectsDataList', 'subjectsDataListOptions'),
+                'cabinet_id': getDataListSelectedOption('cabinetsDataList', 'cabinetsDataListOptions'),
+                'day_of_week': dayNum.value,
+                'from_time': document.querySelector('#from_timeField').value,
+                'to_time': document.querySelector('#to_timeField').value
+            })
+        })
+
+        acceptDelete.addEventListener('click', () => {
+            axios.post(urlBase + urlPathname + '/delete', {'id': acceptDelete.getAttribute('data-id')})
+            .then(() => {
+                softReload()
+                document.querySelector('#closeModal').click()
+            })
+        })
+    }
+
+    function loadModalFieldsOptions() {
         axios.post(urlPathname + '/get_modal_fields')
         .then((result) => {
             const subjectsData = result.data.subjects
@@ -625,79 +723,34 @@ function scheduleController() {
             })
                 
         })
+    }
 
-        const dayNum         = document.querySelector('#dayNum')
-        const classroomId    = document.querySelector('#classroomId')
-
-        addModalButton.forEach((button) => {
-            button.addEventListener('click', () => {
-                dayNum.value = button.getAttribute('data-day')
-                classroomId.value = button.getAttribute('data-classroom-id')
+    function softReload() {
+        axios.get(window.location.href)
+        .then((response) => {
+            const scheduleContainer = document.querySelector('#schedule')
+            let parser = new DOMParser().parseFromString(response.data, 'text/html')
+            scheduleContainer.innerHTML = ''
+            Object.values(parser.querySelectorAll('#schedule .card')).forEach((elem) => {
+                scheduleContainer.append(elem)
             })
         })
     }
-    
-    function drawSchedule() {
-        const scheduleContainer = document.querySelector('#schedule')
-        const daysOfWeek = 6
-        let dayOfWeek = ''
-        
-        for (let i = 1; i < daysOfWeek + 1; i++) {
 
-            switch(i) {
-                case 1: dayOfWeek = 'Понедельник'
-                    break
-                case 2: dayOfWeek = 'Вторник'
-                    break
-                case 3: dayOfWeek = 'Среда'
-                    break
-                case 4: dayOfWeek = 'Четверг'
-                    break
-                case 5: dayOfWeek = 'Пятница'
-                    break
-                case 6: dayOfWeek = 'Суббота'
-                    break
-            }
 
-            scheduleContainer.setAttribute('data-classroom-id', 35)
-
-            if (scheduleContainer.getAttribute('data-classroom-id')) {
-                document.querySelector('#chooseClassroom').classList.add('hidden')
-                scheduleContainer.innerHTML += `
-                    <div class="card table-responsive animate__animated animate__fadeIn" data-day="${i}">
-                    <div class="card-header d-flex justify-content-between pt-3">
-                        <h5>${dayOfWeek}</h5>
-                        <ion-icon data-bs-toggle="modal" data-day="${i}" data-classroom-id="${scheduleContainer.getAttribute('data-classroom-id')}" data-bs-target="#addModal" name="add-circle" class="rowAdd text-light" style="cursor: pointer; font-size:24px"></ion-icon>
-                    </div>
-                    <table class="table text-center">
-                        <thead>
-                            <tr>
-                                <td>#</td>
-                                <td>Предмет</td>
-                                <td>Учитель</td>
-                                <td>Время</td>
-                                <td>Кабинет</td>
-                                <td>Управление</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Русский язык</td>
-                                <td>Светлана Аналовна</td>
-                                <td>8:00 - 8:45</td>
-                                <td>215 каб.</td>
-                                <td>
-                                    <ion-icon name="create" class="rowEdit text-primary" style="cursor: pointer; font-size:24px"></ion-icon>
-                                    <ion-icon name="close-circle" data-bs-toggle="modal" data-bs-target="#warningModal" class="rowDelete text-danger" style="margin-left: 10px; cursor: pointer; font-size:24px"></ion-icon>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            `
-            }
-        }
+    function saveItemToSchedule(data) {
+        axios.post(urlPathname + '/save', data)
+        .then((result) => {
+            softReload()
+            document.querySelector('[data-bs-dismiss="modal"]').click()
+        })
+        .catch((data) => {
+            let errors = data.response.data.errors
+            
+            Object.keys(errors).forEach((error) => {
+                document.querySelector('.modal-body').innerHTML += `<p class="errors text-danger">${errors[error]}</p>`
+            })
+        })
     }
 }
 
@@ -717,4 +770,11 @@ function isEmptyString(str) {
       return true;
       
     return false;
+}
+
+function getDataListSelectedOption(inputId, dataListOptions) 
+{
+    const shownVal = document.getElementById(inputId).value
+    const result   = document.querySelector("#" + dataListOptions + " option[value='" + shownVal + "']")?.dataset.value
+    return result
 }

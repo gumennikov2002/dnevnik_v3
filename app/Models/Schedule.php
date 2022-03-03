@@ -9,13 +9,14 @@ class Schedule extends Model
 {
     use HasFactory;
     public $timestamps = false;
+    protected $table = 'schedule';
 
     protected $fillable = [
         'classroom_id',
-        'teacher_id',
         'from_time',
         'to_time',
         'cabinet_id',
+        'subject_id',
         'day_of_week'
     ];
 }

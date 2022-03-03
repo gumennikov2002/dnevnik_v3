@@ -72,4 +72,7 @@ Route::group(['middleware' => 'AuthCheck'], function() {
 
     Route::get('schedule', [ScheduleController::class, 'index'])->name('schedule');
     Route::post('schedule/get_modal_fields', [ScheduleController::class, 'get_modal_fields'])->name('schedule.get_modal_fields');
+    Route::post('schedule/save', [ScheduleController::class, 'save'])->name('schedule.save');
+    Route::post('schedule/get_record', [ScheduleController::class, 'get_record'])->name('schedule.get_record');
+    Route::post('schedule/delete', [ScheduleController::class, 'delete'])->name('schedule.delete');
 });
