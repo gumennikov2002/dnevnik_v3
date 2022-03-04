@@ -12,7 +12,6 @@
 
     @if(isset($schedules))
         @for ($i = 1;  $i < 7; $i++)
-            <? $data_day = $i; ?>
             @switch($i)
                 @case(1)
                     <? $day_of_week = 'Понедельник'; ?>
@@ -34,7 +33,7 @@
                     @break
             @endswitch
 
-            <div class="card table-responsive animate__animated animate__fadeIn" data-day="{{ $data_day }}">
+            <div class="card table-responsive animate__animated animate__fadeIn" data-day="{{ $i }}">
                 <div class="card-header d-flex justify-content-between pt-3">
                     <h5>{{ $day_of_week }}</h5>
                     <ion-icon data-bs-toggle="modal" data-day="{{ $i }}" data-bs-target="#addModal" name="add-circle" class="rowAdd text-light" style="cursor: pointer; font-size:24px"></ion-icon>
@@ -52,7 +51,7 @@
                     </thead>
                     <tbody>
                         @foreach ($schedules as $item)
-                            @if ($item->day_of_week === $data_day)
+                            @if ($item->day_of_week === $i)
                                 <tr>
                                     <td>#</td>
                                     <td>{{ $item->subject }}</td>

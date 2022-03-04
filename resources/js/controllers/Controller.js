@@ -23,6 +23,7 @@ if (typeof urlCurrent.split('?')[1] !== 'undefined') {
 
 axios.defaults.headers.post['X-CSRF-TOKEN'] = document.querySelector('input[name=_token]').value
 
+theme()
 routeManager()
 
 function routeManager() {
@@ -30,6 +31,39 @@ function routeManager() {
     urlPathname === '/profile'  ? profileController() : null
     urlPathname === '/schedule' ? scheduleController() : null
     urlPathname.split('_')[1] === 'crud' ? crudController() : null
+}
+
+function theme() {
+    let season = seasonDetector()
+    let colors = null
+
+    if (season === 'Spring') {
+        colors = {
+            'primary': '#5eaf5d',
+            'active': '#488347'
+        }
+    }
+    if (season === 'Autumn') {
+        colors = {
+            'primary': '#8a7d8b',
+            'active': '#a9c5e0'
+        }
+    }
+    if (season === 'Summer') {
+        colors = {
+            'primary': '#e98e58',
+            'active': '#f18040'
+        }
+    }
+    if (season === 'Winter') {
+        colors = {
+            'primary': '#a59fd4',
+            'active': '#594eb1'
+        }
+    }
+
+    document.documentElement.style.setProperty('--primary-color', colors.primary)
+    document.documentElement.style.setProperty('--active-color', colors.active)
 }
 
 function authController() {
@@ -53,30 +87,48 @@ function authController() {
         body.classList.remove('spring-bg')
         body.classList.remove('autumn-bg')
         body.classList.add('winter-bg')
+        loginWindow.classList.remove('summer-bg')
 
         loginWindow.classList.remove('spring')
         loginWindow.classList.remove('autumn')
         loginWindow.classList.add('winter')
+        loginWindow.classList.remove('summer')
     }
 
     if (season === 'Spring') {
         body.classList.add('spring-bg')
         body.classList.remove('autumn-bg')
         body.classList.remove('winter-bg')
+        loginWindow.classList.remove('summer-bg')
 
         loginWindow.classList.add('spring')
         loginWindow.classList.remove('autumn')
         loginWindow.classList.remove('winter')
+        loginWindow.classList.remove('summer')
     }
 
     if (season === 'Autumn') {
         body.classList.remove('spring-bg')
         body.classList.add('autumn-bg')
         body.classList.remove('winter-bg')
+        loginWindow.classList.remove('summer-bg')
 
         loginWindow.classList.remove('spring')
         loginWindow.classList.add('autumn')
         loginWindow.classList.remove('winter')
+        loginWindow.classList.remove('summer')
+    }
+
+    if (season === 'Summer') {
+        body.classList.remove('spring-bg')
+        body.classList.remove('autumn-bg')
+        body.classList.remove('winter-bg')
+        body.classList.add('summer-bg')
+
+        loginWindow.classList.remove('spring')
+        loginWindow.classList.remove('autumn')
+        loginWindow.classList.remove('winter')
+        loginWindow.classList.add('summer')
     }
 
     function disableEnableButton(action) {
@@ -120,26 +172,6 @@ function authController() {
             textError.append('Неверный логин или пароль')
         })
     })
-
-    function seasonDetector() {
-        let now = new Date()
-        let month = now.getMonth() + 1
-        let season = null
-        
-        if (2 >= month >= 1 || month === 12) {
-            season = 'Winter'
-        }
-
-        if (month >= 3 && month <= 5) {
-            season = 'Spring'
-        }
-
-        if (month >= 6 && month < 12) {
-            season = 'Autumn'
-        }
-
-        return season
-    }
 }
 
 function sidebarController() {
@@ -777,4 +809,22 @@ function getDataListSelectedOption(inputId, dataListOptions)
     const shownVal = document.getElementById(inputId).value
     const result   = document.querySelector("#" + dataListOptions + " option[value='" + shownVal + "']")?.dataset.value
     return result
+}
+
+function seasonDetector() {
+    let now = new Date()
+    let month = now.getMonth() + 1
+    let season = null
+    
+    if (2 >= month >= 1 || month === 12) {
+        season = 'Winter'
+    }
+    if (month >= 3 && month <= 5) {
+        season = 'Spring'
+    }
+    if (month >= 6 && month < 12) {
+        season = 'Autumn'
+    }
+
+    return season
 }

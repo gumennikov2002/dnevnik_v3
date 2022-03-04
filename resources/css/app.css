@@ -210,14 +210,26 @@ h1, h2, h3, h4, h5 {
 
 .winter-bg {
     background: url('../../public/images/winter.jpg') no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
 }
 
 .spring-bg {
-    background: url('../../public/images/spring.jpg') no-repeat;
+    background: url('../../public/images/spring.jpeg') no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+.summer-bg {
+    background: url('../../public/images/summer.jpg') no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
 }
 
 .autumn-bg {
     background: url('../../public/images/autumn.jpg') no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
 }
 
 #authPage .winter {
@@ -226,11 +238,16 @@ h1, h2, h3, h4, h5 {
 }
 
 #authPage .spring {
-    background: linear-gradient(90deg, rgb(231 183 95 / 50%) 0%, rgb(227 47 88 / 50%) 100%);
+    background: linear-gradient(rgb(201 199 138) 0%, rgb(58 169 87 / 50%) 100%);
     background-size: cover;
 }
 
 #authPage .autumn {
+    background: linear-gradient(rgb(223 215 209 / 50%) 0%, rgb(227 155 47 / 50%) 100%);
+    background-size: cover;
+}
+
+#authPage .summer {
     background: linear-gradient(rgb(223 215 209 / 50%) 0%, rgb(227 155 47 / 50%) 100%);
     background-size: cover;
 }
