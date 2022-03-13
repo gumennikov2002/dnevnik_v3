@@ -14,22 +14,22 @@
         @for ($i = 1;  $i < 7; $i++)
             @switch($i)
                 @case(1)
-                    <? $day_of_week = 'Понедельник'; ?>
+                    <?php $day_of_week = 'Понедельник'; ?>
                     @break
                 @case(2)
-                    <? $day_of_week = 'Вторник'; ?>
+                    <?php $day_of_week = 'Вторник'; ?>
                     @break
                 @case(3)
-                    <? $day_of_week = 'Среда'; ?>
+                    <?php $day_of_week = 'Среда'; ?>
                     @break
                 @case(4)
-                    <? $day_of_week = 'Четверг'; ?>
+                    <?php $day_of_week = 'Четверг'; ?>
                     @break
                 @case(5)
-                    <? $day_of_week = 'Пятница'; ?>
+                    <?php $day_of_week = 'Пятница'; ?>
                     @break
                 @case(6)
-                    <? $day_of_week = 'Суббота'; ?>
+                    <?php $day_of_week = 'Суббота'; ?>
                     @break
             @endswitch
 

@@ -41,14 +41,16 @@ class ScheduleController extends Controller
         return $record;
     }
 
-    public function get_modal_fields() {
-        $data = [
+    public function get_subjects() {
+        return response([
             'subjects' => Subject::all(),
-            'teachers'  => User::all(),
             'cabinets' => Cabinet::all()
-        ];
+        ]);
+    }
 
-        return response($data);
+    public function get_teachers(Request $request) {
+        $subject = Subject::find($request->post('subject_id'));
+        return User::find($subject->teacher_id);
     }
 
     public function save(Request $request) {

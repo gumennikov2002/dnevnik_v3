@@ -730,10 +730,9 @@ function scheduleController() {
     }
 
     function loadModalFieldsOptions() {
-        axios.post(urlPathname + '/get_modal_fields')
+        axios.post(urlPathname + '/get_subjects')
         .then((result) => {
             const subjectsData = result.data.subjects
-            const teachersData = result.data.teachers
             const cabinetsData = result.data.cabinets
 
             Object.keys(subjectsData).forEach((item) => {
@@ -742,18 +741,31 @@ function scheduleController() {
                 `
             })
 
-            Object.keys(teachersData).forEach((item) => {
-                document.querySelector('#teachersDataListOptions').innerHTML += `
-                    <option data-value="${teachersData[item].id}" value="${teachersData[item].full_name}">
-                `
-            })
-
             Object.keys(cabinetsData).forEach((item) => {
                 document.querySelector('#cabinetsDataListOptions').innerHTML += `
                     <option data-value="${cabinetsData[item].id}" value="${cabinetsData[item].num}">
                 `
             })
-                
+        })
+
+        const subjectsInput = document.querySelector('#subjectsDataList')
+        let subjectId = null
+
+        subjectsInput.addEventListener('input', () => {
+            subjectId = getDataListSelectedOption('subjectsDataList', 'subjectsDataListOptions')
+            if (typeof subjectId == 'undefined') {
+                subjectId = null
+            }
+
+            if (!isNull(subjectId)) {
+                axios.post(urlPathname + '/get_teachers', {'subject_id': subjectId})
+                .then((result) => {
+                    let teacher = result.data
+                    document.querySelector('#teachersDataListOptions').innerHTML = `
+                    <option data-value="${teacher.id}" value="${teacher.full_name}">
+                `
+                })
+            }
         })
     }
 
