@@ -577,14 +577,12 @@ function scheduleController() {
         drawModal()
     }
 
-    chooseClassroom.addEventListener('input', () => {
+    chooseClassroom.addEventListener(('input'), () => {
         let selectedClassroom = getDataListSelectedOption('classroomsChooseDataList', 'classroomsChooseDataListOptions')
 
         if (typeof selectedClassroom !== 'undefined') {
-            window.history.replaceState('', '', urlBase + urlPathname + '?classroom_id=' + selectedClassroom)
+            redirect(urlBase + urlPathname + '?classroom_id=' + selectedClassroom)
         }
-
-        softReload()
     })
 
     function drawModal() {
@@ -629,7 +627,7 @@ function scheduleController() {
             const field = modalFields[index]
             if (field.searchable) {
                 modalBody.innerHTML += `
-                    <input class="form-control mb-2" list="${field.name}sDataListOptions" id="${field.name}sDataList" placeholder="${field.placeholder}">
+                    <input class="form-control mb-2" list="${field.name}sDataListOptions" id="${field.name}sDataList" placeholder="${field.placeholder}" ${index === 'teacher' ? "disabled" : ""}>
                     <datalist id="${field.name}sDataListOptions"></datalist>
                 `
             }
@@ -657,6 +655,15 @@ function scheduleController() {
         
         document.addEventListener('click', (e) => {
             if (e.target && e.target.classList.contains('rowAdd')) {
+                document.querySelector('#addModal .modal-title').innerHTML = 'Добавить запись'
+                let modalInputs = document.querySelectorAll('#addModal input')
+
+                modalInputs.forEach((input) => {
+                    if (input.getAttribute('id') !== 'dayNum' && input.getAttribute('id') !== 'recordId') {
+                        input.value = ''
+                    }
+                })
+
                 dayNum.value = e.target.getAttribute('data-day')
                 recordId.value = ''
             }
@@ -665,6 +672,7 @@ function scheduleController() {
             }
 
             if (e.target && e.target.classList.contains('rowEdit')) {
+                document.querySelector('#addModal .modal-title').innerHTML = 'Изменить запись'
                 dayNum.value = e.target.getAttribute('data-day')
                 recordId.value = e.target.getAttribute('data-record-id')
                 if (recordId.value !== '') {
@@ -681,6 +689,18 @@ function scheduleController() {
                             if (index === 'from_time' || index == 'to_time') {
                                 elemId = '#' + index + 'Field'
                                 document.querySelector(elemId).value = data[index]
+                            }
+
+                            if (index === 'teacher_id') {
+                                let subjectId = getDataListSelectedOption('subjectsDataList', 'subjectsDataListOptions')
+                                axios.post(urlPathname + '/get_teachers', {'subject_id': subjectId})
+                                .then((result) => {
+                                    let teacher = result.data
+                                    let teacherDataListOptions = document.querySelector('#teachersDataListOptions')
+                                    let teacherInput = document.querySelector('#teachersDataList')
+                                    teacherInput.value = teacher.full_name
+                                    teacherDataListOptions.innerHTML = `<option data-value="${teacher.id}" value="${teacher.full_name}"></option>`
+                                })
                             }
  
                             let field = document.querySelector(elemId)
@@ -761,26 +781,14 @@ function scheduleController() {
                 axios.post(urlPathname + '/get_teachers', {'subject_id': subjectId})
                 .then((result) => {
                     let teacher = result.data
+                    document.querySelector('#teachersDataList').value = teacher.full_name
                     document.querySelector('#teachersDataListOptions').innerHTML = `
-                    <option data-value="${teacher.id}" value="${teacher.full_name}">
+                    <option data-value="${teacher.id}" value="${teacher.full_name}" selected>
                 `
                 })
             }
         })
     }
-
-    function softReload() {
-        axios.get(window.location.href)
-        .then((response) => {
-            const scheduleContainer = document.querySelector('#schedule')
-            let parser = new DOMParser().parseFromString(response.data, 'text/html')
-            scheduleContainer.innerHTML = ''
-            Object.values(parser.querySelectorAll('#schedule .card')).forEach((elem) => {
-                scheduleContainer.append(elem)
-            })
-        })
-    }
-
 
     function saveItemToSchedule(data) {
         axios.post(urlPathname + '/save', data)
@@ -789,12 +797,25 @@ function scheduleController() {
             document.querySelector('[data-bs-dismiss="modal"]').click()
         })
         .catch((data) => {
+            console.log(data)
             let errors = data.response.data.errors
             
             Object.keys(errors).forEach((error) => {
                 document.querySelector('.modal-body').innerHTML += `<p class="errors text-danger">${errors[error]}</p>`
             })
         })
+    }
+
+    function softReload() {
+        axios.get(window.location.href)
+            .then((response) => {
+                const scheduleContainer = document.querySelector('#schedule')
+                let parser = new DOMParser().parseFromString(response.data, 'text/html')
+                scheduleContainer.innerHTML = ''
+                Object.values(parser.querySelectorAll('#schedule .card')).forEach((elem) => {
+                    scheduleContainer.append(elem)
+                })
+            })
     }
 }
 
@@ -839,4 +860,8 @@ function seasonDetector() {
     }
 
     return season
+}
+
+function redirect(url) {
+    window.location.href = url
 }

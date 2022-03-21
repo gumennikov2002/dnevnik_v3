@@ -68,8 +68,8 @@ class ScheduleController extends Controller
                 'subject_id'   => 'required|integer',
                 'cabinet_id'   => 'required|integer',
                 'day_of_week'  => 'required|integer',
-                'from_time'    => 'required|integer',
-                'to_time'      => 'required|integer'
+                'from_time'    => 'required',
+                'to_time'      => 'required'
             ]);
     
             $record = Schedule::create($validation);
