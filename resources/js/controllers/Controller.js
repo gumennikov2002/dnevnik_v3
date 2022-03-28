@@ -28,7 +28,6 @@ routeManager()
 
 function routeManager() {
     urlPathname !== '/auth'     ? sidebarController() : authController()
-    urlPathname === '/profile'  ? profileController() : null
     urlPathname === '/schedule' ? scheduleController() : null
     urlPathname.split('_')[1] === 'crud' ? crudController() : null
 }
@@ -552,20 +551,6 @@ function crudController() {
             prevPage.href = urlBase + urlPathname + '?page=' + prevPageNum + searchParam
         }
     }
-}
-
-function profileController() {
-    const profile               = document.querySelector('#profilePage')
-    const profilePic            = profile.querySelector('#profile-pic')
-    const profilePicEditElement = profile.querySelector('#profile-pic-edit')
-
-    profilePic.addEventListener('mouseover', () => {
-        profilePicEditElement.classList.remove('hidden')
-    })
-
-    profilePicEditElement.addEventListener('mouseout', () => {
-        profilePicEditElement.classList.add('hidden')
-    })
 }
 
 function scheduleController() {

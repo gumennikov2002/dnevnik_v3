@@ -37,6 +37,8 @@ Route::group(['middleware' => 'AuthCheck'], function() {
     });
 
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/profile/change_password', [ProfileController::class, 'change_password'])->name('profile.change_password');
     Route::get('/profile/logout', [ProfileController::class, 'logout'])->name('profile.logout');
 
     Route::get('users_crud', [UsersController::class, 'index'])->name('users');

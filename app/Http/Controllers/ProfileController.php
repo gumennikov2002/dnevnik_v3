@@ -2,7 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Classes;
+use App\Models\Classroom;
+use App\Models\User;
+use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use JetBrains\PhpStorm\NoReturn;
 
 class ProfileController extends Controller
 {
@@ -19,7 +25,67 @@ class ProfileController extends Controller
 
         $data['user']['age'] = $user_age;
 
+        if ($data['user']->role === 'Ученик') {
+            $class_id = Classes::where('user_id', $data['user']->id)->first()->classroom_id;
+            $classroom = Classroom::find($class_id)->first();
+            $data['user']['classroom']  = $classroom->class;
+            $data['user']['classroom_teacher'] = User::where('id', $classroom->teacher_id)->first()->full_name;
+        }
+
         return view('profile.index', $data);
+    }
+
+    public function update(Request $request) {
+        $user = User::find($this->USER_INFO->id);
+        $validate_fields = [];
+
+        if ($request->email || $request->phone) {
+            $validate_fields = [
+                'email' => 'required',
+                'phone' => 'required|integer'
+            ];
+        }
+
+        $validation = $request->validate($validate_fields);
+
+        if ($request->profile_pic) {
+            $validate_fields['profile_pic'] = 'required|mimes:jpg,png,jpeg';
+
+            if ($request->validate(['profile_pic' => 'required|mimes:jpg,png,jpeg'])) {
+                $image_name = time().'-'.$request->phone.'.'.$request->profile_pic->extension();
+                $request->profile_pic->move(public_path('images'), $image_name);
+                $validation['profile_pic'] = 'images/'.$image_name;
+            }
+        }
+
+        if ($validation) {
+            $user->update($validation);
+            return redirect(route('profile'));
+        }
+    }
+
+    public function change_password(Request $request) {
+        $user = User::find($this->USER_INFO->id);
+        $old_password = $request->old_password;
+        $new_password = $request->new_password;
+        $repeat_password = $request->repeat_password;
+
+        $check_password = Hash::check($old_password, $user->password);
+
+        $fields = [
+            'old_password'    => 'required',
+            'new_password'    => 'required|min:6',
+            'repeat_password' => 'required'
+        ];
+
+        $validate = $request->validate($fields);
+
+        if ($new_password === $repeat_password && $validate && $check_password) {
+            $user->update(['password' => Hash::make($new_password)]);
+            return redirect(route('profile.logout'));
+        }
+
+        return back();
     }
 
     public function logout() {
