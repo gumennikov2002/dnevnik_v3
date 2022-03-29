@@ -13,7 +13,8 @@ class SidebarController extends Controller
 
     public function __construct()
     {
-        
+        $schedule = new ScheduleController();
+
         $this->ROLES = [
             'admin'             => [],
             'director'          => [],
@@ -24,7 +25,7 @@ class SidebarController extends Controller
 
         $this->MENU = [
             'schedule' => [
-                'url'   => '/schedule',
+                'url'   => $schedule->get_link(),
                 'icon'  => 'calendar',
                 'title' => 'Расписание',
                 'class' => 'schedule',

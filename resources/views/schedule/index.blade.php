@@ -2,15 +2,19 @@
 @section('title', 'Расписание')
 @section('page_title', 'Расписание')
 @section('content')
-<input class="form-control mb-4" list="classroomsChooseDataListOptions" id="classroomsChooseDataList" placeholder="Выберите класс">
-<datalist id="classroomsChooseDataListOptions">
-    @foreach($classrooms as $classroom)
-    <option data-value="{{ $classroom->id }}" value="{{ $classroom->class }}">
-    @endforeach
-</datalist>
+
+@if ($user_role !== 'Ученик')
+    <input class="form-control mb-4" list="classroomsChooseDataListOptions" id="classroomsChooseDataList" placeholder="Выберите класс">
+    <datalist id="classroomsChooseDataListOptions">
+        @foreach($classrooms as $classroom)
+        <option data-value="{{ $classroom->id }}" value="{{ $classroom->class }}">
+        @endforeach
+    </datalist>
+@endif
+
 <div id="schedule" class="d-flex justify-content-between flex-wrap">
 
-    @if(isset($schedules))
+    @if (isset($schedules))
         @for ($i = 1;  $i < 7; $i++)
             @switch($i)
                 @case(1)
@@ -36,7 +40,9 @@
             <div class="card table-responsive animate__animated animate__fadeIn" data-day="{{ $i }}">
                 <div class="card-header d-flex justify-content-between pt-3">
                     <h5>{{ $day_of_week }}</h5>
-                    <ion-icon data-bs-toggle="modal" data-day="{{ $i }}" data-bs-target="#addModal" name="add-circle" class="rowAdd text-light" style="cursor: pointer; font-size:24px"></ion-icon>
+                    @if ($user_role !== 'Ученик')
+                        <ion-icon data-bs-toggle="modal" data-day="{{ $i }}" data-bs-target="#addModal" name="add-circle" class="rowAdd text-light" style="cursor: pointer; font-size:24px"></ion-icon>
+                    @endif
                 </div>
                 <table class="table text-center">
                     <thead>
@@ -46,7 +52,9 @@
                             <td>Учитель</td>
                             <td>Время</td>
                             <td>Кабинет</td>
-                            <td>Управление</td>
+                            @if ($user_role !== 'Ученик')
+                                <td>Управление</td>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -58,10 +66,12 @@
                                     <td>{{ $item->teacher }}</td>
                                     <td>{{ $item->from_time }}</td>
                                     <td>{{ $item->cabinet }}</td>
-                                    <td>
-                                        <ion-icon data-day="{{ $item->day_of_week }}" data-record-id="{{ $item->id }}" name="create" data-bs-toggle="modal" data-bs-target="#addModal" class="rowEdit text-primary" style="cursor: pointer; font-size:24px"></ion-icon>
-                                        <ion-icon data-record-id="{{ $item->id }}" name="close-circle" data-bs-toggle="modal" data-bs-target="#warningModal" class="rowDelete text-danger" style="margin-left: 10px; cursor: pointer; font-size:24px"></ion-icon>
-                                    </td>
+                                    @if ($user_role !== 'Ученик')
+                                        <td>
+                                            <ion-icon data-day="{{ $item->day_of_week }}" data-record-id="{{ $item->id }}" name="create" data-bs-toggle="modal" data-bs-target="#addModal" class="rowEdit text-primary" style="cursor: pointer; font-size:24px"></ion-icon>
+                                            <ion-icon data-record-id="{{ $item->id }}" name="close-circle" data-bs-toggle="modal" data-bs-target="#warningModal" class="rowDelete text-danger" style="margin-left: 10px; cursor: pointer; font-size:24px"></ion-icon>
+                                        </td>
+                                    @endif
                                 </tr>
                             @endif
                         @endforeach

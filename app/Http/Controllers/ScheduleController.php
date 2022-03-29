@@ -13,8 +13,11 @@ class ScheduleController extends Controller
 {
     public function index(Request $request) {
         $data = [
-            'classrooms' => Classroom::all()
+            'classrooms' => Classroom::all(),
+            'user_role'  => $this->USER_INFO->role
         ];
+
+        $view = 'schedule.index';
 
         if ($request->has('classroom_id')) {
             $schedules = Schedule::where('classroom_id', $request->get('classroom_id'))->get();
@@ -31,8 +34,8 @@ class ScheduleController extends Controller
     
             $data['schedules'] = $schedules;
         }
-
-        return view('schedule.index', $data);
+        
+        return view($view, $data);
     }
 
     public function get_record(Request $request) {
@@ -83,5 +86,13 @@ class ScheduleController extends Controller
 
     public function delete(Request $request) {
         return Schedule::destroy($request->post('id'));
+    }
+
+    public function get_link() {
+        if ($this->USER_INFO->role === 'Ученик') {
+            $classroom_id = User::get_classroom($this->USER_INFO->id)->id;
+            return '/schedule?classroom_id='.$classroom_id;
+        }
+        return '/schedule';
     }
 }

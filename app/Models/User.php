@@ -49,6 +49,11 @@ class User extends Authenticatable
      */
     protected $casts = [];
 
+    public static function get_classroom($user_id) {
+        $class = Classes::where('user_id', $user_id)->first();
+        return Classroom::find($class->classroom_id);
+    }
+
     protected static function init_config() {
         return [
             'config'     => [
