@@ -15,13 +15,59 @@
     font-family: 'Proxima';
 }
 
-:root {
-    --primary-color: #a59fd4;
-    --active-color: #594eb1;
-}
+:root {}
 
 h1, h2, h3, h4, h5 {
     font-family: 'ProximaBold';
+}
+
+#preloader {
+    position: absolute;
+    background: #f3f3f3;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+}
+
+.preloader-end {
+    animation: preloader-end 2s;
+    animation-fill-mode: forwards;
+    animation-delay: 0.8s;
+}
+
+#preloader .d-flex {
+    width: 200px;
+    align-items: center;
+}
+
+#preloader .circle1, #preloader .circle2, #preloader .circle3 {
+    background: var(--primary-color);
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    animation: preloader-start 1s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+@keyframes preloader-start {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(1.3);
+        margin-top: -20px;
+    }
+}
+
+@keyframes preloader-end {
+    from {
+
+    }
+    to {
+        z-index: -1;
+        opacity: 0;
+    }
 }
 
 .cp {
