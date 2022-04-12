@@ -20,12 +20,21 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4"></div>
-            <div class="col-md-2">
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-header">Колличество</div>
+                    <div class="card-body text-center">
+                        <h1>{{ count($classmates) }}</h1>
+                        <span>Человек</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
                 <div class="card">
                     <div class="card-header">Класс</div>
                     <div class="card-body text-center">
                         <h1>{{ $classroom->class }}</h1>
+                        <span>Класс</span>
                     </div>
                 </div>
             </div>
