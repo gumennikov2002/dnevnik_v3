@@ -34,7 +34,7 @@ class ScheduleController extends Controller
     
             $data['schedules'] = $schedules;
         }
-        
+
         return view($view, $data);
     }
 

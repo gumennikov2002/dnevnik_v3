@@ -78,4 +78,6 @@ Route::group(['middleware' => 'AuthCheck'], function() {
     Route::post('schedule/save', [ScheduleController::class, 'save'])->name('schedule.save');
     Route::post('schedule/get_record', [ScheduleController::class, 'get_record'])->name('schedule.get_record');
     Route::post('schedule/delete', [ScheduleController::class, 'delete'])->name('schedule.delete');
+
+    Route::get('classmates', [ProfileController::class, 'classmates'])->name('classmates');
 });

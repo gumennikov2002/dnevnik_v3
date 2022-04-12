@@ -22,4 +22,11 @@ class Controller extends BaseController
             $this->USER_INFO = User::where('id', $this->USER_ID)->get()[0];
         }
     }
+
+    protected function check_role($role_name) {
+        if ($this->USER_INFO->role === $role_name) {
+            return true;
+        }
+        return false;
+    }
 }

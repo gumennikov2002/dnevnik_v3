@@ -337,6 +337,37 @@ h1, h2, h3, h4, h5 {
     color: #fff;
 }
 
+#classmates .card-header {
+    background: var(--primary-color);
+    color: #fff;
+}
+
+#classmates .card .card-body {
+    align-items: center;
+}
+
+#classmates .card span {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+#classmates .card p span {
+    font-size: 14px;
+    font-weight: normal;
+}
+
+#classmates .card img {
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+#classmatesList {
+    height: 500px !important;
+    overflow: auto;
+}
+
 @media screen and (max-width: 1500px) {
     .top-bar h2 {
         margin-left: 60px;

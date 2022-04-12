@@ -94,4 +94,25 @@ class ProfileController extends Controller
             return redirect('/auth');
         }
     }
+
+    public function classmates() {
+        $class = Classes::where('user_id', $this->USER_INFO->id)->first();
+        $classroom = Classroom::find($class->classroom_id)->first();
+        $classroom_teacher = User::where('id', $classroom->teacher_id)->first();
+        $classmates = Classes::where('classroom_id', $class->classroom_id)->get();
+        $classmates_info = [];
+
+        foreach($classmates as $classmate) {
+            $classmates_info[] = User::find($classmate->user_id);
+        }
+
+        $data = [
+            'user' => $this->USER_INFO,
+            'classroom' => $classroom,
+            'classroom_teacher' => $classroom_teacher,
+            'classmates' => $classmates_info
+        ];
+
+        return view('classmates.index', $data);
+    }
 }

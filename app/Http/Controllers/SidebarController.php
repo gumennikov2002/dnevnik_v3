@@ -38,6 +38,13 @@ class SidebarController extends Controller
                 'class' => 'users',
                 'roles' => []
             ],
+            'classmates' => [
+                'url'   => '/classmates',
+                'icon'  => 'man',
+                'title' => 'Мой класс',
+                'class' => 'classmates',
+                'roles' => []
+            ],
             'cabinets' => [
                 'url'   => '/cabinets_crud',
                 'icon'  => 'tablet-portrait',
