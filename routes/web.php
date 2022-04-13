@@ -40,6 +40,7 @@ Route::group(['middleware' => 'AuthCheck'], function() {
     Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
     Route::post('/profile/change_password', [ProfileController::class, 'change_password'])->name('profile.change_password');
     Route::get('/profile/logout', [ProfileController::class, 'logout'])->name('profile.logout');
+    Route::get('/profile/change_theme', [ProfileController::class, 'change_theme'])->name('change_theme');
 
     Route::get('users_crud', [UsersController::class, 'index'])->name('users');
     Route::post('users_crud/create', [UsersController::class, 'create'])->name('users.create');

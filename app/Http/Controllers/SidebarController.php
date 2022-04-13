@@ -65,6 +65,13 @@ class SidebarController extends Controller
                 'title' => 'Предметы',
                 'class' => 'subjects',
                 'roles' => []
+            ],
+            'theme'     => [
+                'url'   => '/profile/change_theme',
+                'icon'  => 'contrast',
+                'title' => 'Сменить тему',
+                'class' => 'theme',
+                'roles' => []
             ]
         ];
 
@@ -80,10 +87,6 @@ class SidebarController extends Controller
                 'profile_pic'  => $this->USER_INFO->profile_pic,
                 'profile_name' => $this->USER_INFO->full_name,
                 'profile_menu' => [
-                    'settings' => [
-                        'title' => 'Настройки',
-                        'link'  => '#'
-                    ],
                     'profile' => [
                         'title' => 'Профиль',
                         'link'  => '/profile'

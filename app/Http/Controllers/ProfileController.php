@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Classes;
 use App\Models\Classroom;
 use App\Models\User;
+use App\Models\User_settings;
 use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\View\View;
 use JetBrains\PhpStorm\NoReturn;
 
 class ProfileController extends Controller
@@ -114,5 +116,14 @@ class ProfileController extends Controller
         ];
 
         return view('classmates.index', $data);
+    }
+
+    public function change_theme() {
+        $new_theme = User_settings::change_theme($this->USER_INFO->id);
+        return redirect()->back();
+    }
+
+    public function detect_theme() {
+        return User_settings::detect_theme($this->USER_INFO->id);
     }
 }
