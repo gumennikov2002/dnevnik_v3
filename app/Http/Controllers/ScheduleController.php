@@ -11,6 +11,28 @@ use Illuminate\Http\Request;
 
 class ScheduleController extends Controller
 {
+    public function teachers_index() {
+        $own_subjects_ids = [];
+        $own_subjects = Subject::where('teacher_id', $this->USER_INFO->id)->get();
+
+        foreach ($own_subjects as $subject) {
+            $own_subjects_ids[] = $subject->id;
+        }
+
+        $schedules = Schedule::whereIn('subject_id', $own_subjects_ids)->get();
+
+        foreach ($schedules as $index => $item) {
+            $schedules[$index]['classroom'] = Classroom::find($item->classroom_id)->class;
+            $schedules[$index]['cabinet'] = Cabinet::find($item->cabinet_id)->num;
+        }
+
+        $data = [
+          'schedules' => $schedules
+        ];
+
+        return view('schedule.teachers_index', $data);
+    }
+
     public function index(Request $request) {
         $data = [
             'classrooms' => Classroom::all(),
@@ -89,10 +111,18 @@ class ScheduleController extends Controller
     }
 
     public function get_link() {
-        if ($this->USER_INFO->role === 'Ученик') {
+        if ($this->USER_INFO->role === RoleController::ROLE_STUDENT) {
             $classroom_id = User::get_classroom($this->USER_INFO->id)->id;
             return '/schedule?classroom_id='.$classroom_id;
         }
+
+        $is_teacher = $this->USER_INFO->role === RoleController::ROLE_TEACHER;
+        $is_classroom_teacher = $this->USER_INFO->role === RoleController::ROLE_CLASSROOM_TEACHER;
+
+        if ($is_teacher || $is_classroom_teacher) {
+            return '/teachers_schedule';
+        }
+
         return '/schedule';
     }
 }

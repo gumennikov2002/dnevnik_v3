@@ -3,7 +3,7 @@
 @section('page_title', 'Расписание')
 @section('content')
 
-@if ($user_role !== 'Ученик')
+@if($user_role === 'Админ' || $user_role === 'Директор' || $user_role === 'Зам. директора')
     <input class="form-control mb-4" list="classroomsChooseDataListOptions" id="classroomsChooseDataList" placeholder="Выберите класс">
     <datalist id="classroomsChooseDataListOptions">
         @foreach($classrooms as $classroom)
@@ -52,7 +52,7 @@
                             <td>Учитель</td>
                             <td>Время</td>
                             <td>Кабинет</td>
-                            @if ($user_role !== 'Ученик')
+                            @if($user_role === 'Админ' || $user_role === 'Директор' || $user_role === 'Зам. директора')
                                 <td>Управление</td>
                             @endif
                         </tr>
@@ -64,9 +64,9 @@
                                     <td>#</td>
                                     <td>{{ $item->subject }}</td>
                                     <td>{{ $item->teacher }}</td>
-                                    <td>{{ $item->from_time }}</td>
+                                    <td>{{ $item->from_time }} - {{ $item->to_time }}</td>
                                     <td>{{ $item->cabinet }}</td>
-                                    @if ($user_role !== 'Ученик')
+                                    @if($user_role === 'Админ' || $user_role === 'Директор' || $user_role === 'Зам. директора')
                                         <td>
                                             <ion-icon data-day="{{ $item->day_of_week }}" data-record-id="{{ $item->id }}" name="create" data-bs-toggle="modal" data-bs-target="#addModal" class="rowEdit text-primary" style="cursor: pointer; font-size:24px"></ion-icon>
                                             <ion-icon data-record-id="{{ $item->id }}" name="close-circle" data-bs-toggle="modal" data-bs-target="#warningModal" class="rowDelete text-danger" style="margin-left: 10px; cursor: pointer; font-size:24px"></ion-icon>
@@ -82,6 +82,7 @@
     @endif
 </div>
 
+@if($user_role === 'Админ' || $user_role === 'Директор' || $user_role === 'Зам. директора')
     <div class="modal fade" id="addModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -118,4 +119,5 @@
             </div>
         </div>
     </div>
+@endif
 @endsection

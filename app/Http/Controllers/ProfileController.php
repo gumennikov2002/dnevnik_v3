@@ -98,8 +98,14 @@ class ProfileController extends Controller
     }
 
     public function classmates() {
-        $class = Classes::where('user_id', $this->USER_INFO->id)->first();
-        $classroom = Classroom::find($class->classroom_id)->first();
+        if ($this->USER_INFO->role === RoleController::ROLE_CLASSROOM_TEACHER) {
+            $classroom = Classroom::where('teacher_id', $this->USER_INFO->id)->first();
+            $class = Classes::where('classroom_id', $classroom->id)->first();
+        } else {
+            $class = Classes::where('user_id', $this->USER_INFO->id)->first();
+            $classroom = Classroom::find($class->classroom_id)->first();
+        }
+
         $classroom_teacher = User::where('id', $classroom->teacher_id)->first();
         $classmates = Classes::where('classroom_id', $class->classroom_id)->get();
         $classmates_info = [];
@@ -129,5 +135,14 @@ class ProfileController extends Controller
         }
 
         return User_settings::detect_theme($this->USER_INFO->id);
+    }
+
+    public function classroom_schedule_link() {
+        if (!RoleController::ROLE_CLASSROOM_TEACHER) {
+            return false;
+        }
+
+        $classroom_id = Classroom::where('teacher_id', $this->USER_INFO->id)->first()->id;
+        return "schedule?classroom_id=$classroom_id";
     }
 }

@@ -74,6 +74,7 @@ Route::group(['middleware' => 'AuthCheck'], function() {
     Route::post('cabinets_crud/update', [CabinetController::class, 'update'])->name('cabinets.update');
 
     Route::get('schedule', [ScheduleController::class, 'index'])->name('schedule');
+    Route::get('teachers_schedule', [ScheduleController::class, 'teachers_index'])->name('teachers_schedule');
     Route::post('schedule/get_subjects', [ScheduleController::class, 'get_subjects'])->name('schedule.get_subjects');
     Route::post('schedule/get_teachers', [ScheduleController::class, 'get_teachers'])->name('schedule.get_teachers');
     Route::post('schedule/save', [ScheduleController::class, 'save'])->name('schedule.save');

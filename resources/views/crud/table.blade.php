@@ -8,8 +8,10 @@
 
 <div class="d-flex justify-content-between" id="crudTemplate">
     <div>
-        <ion-icon name="add-circle" class="text-primary" data-bs-toggle="modal" data-bs-target="#myModal" id="openModal"></ion-icon>
-        <ion-icon name="refresh-circle" class="text-primary" id="crudRefresh"></ion-icon>
+        @if($role === 'Админ' || $role === 'Директор' || $role === 'Зам. директора')
+            <ion-icon name="add-circle" class="text-primary" data-bs-toggle="modal" data-bs-target="#myModal" id="openModal"></ion-icon>
+            <ion-icon name="refresh-circle" class="text-primary" id="crudRefresh"></ion-icon>
+        @endif
     </div>
     <div class="hidden" data-bs-toggle="modal" data-bs-target="#myModal" id="editModal"></div>
     <div>
@@ -28,7 +30,9 @@
                 @if(isset($table_link))
                 <td>Ссылка</td>
                 @endif
-                <td>Действия</td>
+                @if($role === 'Админ' || $role === 'Директор' || $role === 'Зам. директора')
+                        <td>Действия</td>
+                @endif
             </tr>
         </thead>
         <tbody>
@@ -40,10 +44,12 @@
                 @if(isset($table_link))
                 <td><a href="{{ $table_link.$record->id }}">Перейти</a></td>
                 @endif
+                @if($role === 'Админ' || $role === 'Директор' || $role === 'Зам. директора')
                 <td>
                     <ion-icon name="create" class="rowEdit text-primary {{ isset($hide_actions) && $hide_actions['edit'] ? 'hidden' : '' }}" style="cursor: pointer; font-size:24px"></ion-icon>
                     <ion-icon name="close-circle" data-bs-toggle="modal" data-bs-target="#warningModal" class="rowDelete text-danger {{ isset($hide_actions) && $hide_actions['delete'] ? 'hidden' : '' }}" style="margin-left: 10px; cursor: pointer; font-size:24px"></ion-icon>
                 </td>
+                @endif
             </tr>
             @endforeach
         </tbody>
@@ -56,6 +62,7 @@
     </div>
 </div>
 
+@if($role === 'Админ' || $role === 'Директор' || $role === 'Зам. директора')
 <div class="modal fade" id="myModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
@@ -119,6 +126,7 @@
         </div>
     </div>
 </div>
+@endif
 <script>
     let modalFields = '<?= json_encode($modal_fields); ?>';
 </script>

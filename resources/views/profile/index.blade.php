@@ -45,8 +45,10 @@
                     <div class="d-flex justify-content-between mt-3">
                         <img src="{{ $user->profile_pic }}" width="128px" height="128px" style="border-radius: 50%" id="profile-pic">
                         <div class="profile-info" style="margin-left: 25px;">
+                            @if($user->role === 'Ученик')
                             <span>Класс: {{ $user->classroom }}</span> <br>
                             <span>Классный руководитель: {{ $user->classroom_teacher }}</span> <br>
+                            @endif
                             <span>Дата рождения: {{ $user->date_of_birth }} ({{ $user->age }} лет).</span> <br>
                             <span>Номер телефона: {{ $user->phone }}</span> <br>
                             <span>Email: {{ $user->email }}</span> <br>

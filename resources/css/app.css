@@ -526,6 +526,10 @@ h1, h2, h3, h4, h5 {
   background: var(--dark-primary);
 }
 
+.darkTheme .dropdown-menu.show {
+    background: var(--dark-primary);
+}
+
 @media screen and (max-width: 1500px) {
     .top-bar h2 {
         margin-left: 60px;

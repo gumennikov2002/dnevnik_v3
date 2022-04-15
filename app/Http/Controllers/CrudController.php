@@ -14,8 +14,11 @@ class CrudController extends Controller
 
     public function __construct()
     {
+        parent::__construct();
+
         $init = $this->MODEL_NAME::init_config();
         $this->CONFIG = $init['config'];
+        $this->CONFIG['role'] = $this->USER_INFO->role;
         $this->VALIDATE = $init['validate'];
         
         if (isset($init['references'])) {
@@ -33,6 +36,7 @@ class CrudController extends Controller
         $model_path = 'App\Models\\';
         $paginate_count = 15;
         $config['table_body'] = $model::paginate($paginate_count);
+        $config['role'] = $this->USER_INFO->role;
 
         unset($model);
 
