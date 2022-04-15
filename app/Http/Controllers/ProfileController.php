@@ -138,7 +138,7 @@ class ProfileController extends Controller
     }
 
     public function classroom_schedule_link() {
-        if (!RoleController::ROLE_CLASSROOM_TEACHER) {
+        if ($this->USER_INFO->role !== RoleController::ROLE_CLASSROOM_TEACHER) {
             return false;
         }
 
