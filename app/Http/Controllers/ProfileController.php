@@ -124,6 +124,10 @@ class ProfileController extends Controller
     }
 
     public function detect_theme() {
+        if (!isset($this->USER_INFO)) {
+          return false;
+        }
+
         return User_settings::detect_theme($this->USER_INFO->id);
     }
 }
