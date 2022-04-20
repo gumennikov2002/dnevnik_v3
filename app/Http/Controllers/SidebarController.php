@@ -18,6 +18,17 @@ class SidebarController extends Controller
         $profile = new ProfileController();
 
         $this->MENU = [
+            'statistics' => [
+              'url' => '/statistics',
+              'icon' => 'bar-chart',
+              'title' => 'Статистика',
+              'class' => 'statistics',
+              'roles' => [
+                  RoleController::ROLE_ADMIN,
+                  RoleController::ROLE_DIRECTOR,
+                  RoleController::ROLE_ASSOCIATE_DIRECTOR
+              ]
+            ],
             'schedule' => [
                 'url'   => $schedule->get_link(),
                 'icon'  => 'calendar',

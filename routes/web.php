@@ -3,13 +3,13 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CabinetController;
 use App\Http\Controllers\ClassesController;
-use App\Http\Controllers\CrudController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ClassroomsController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\SidebarController;
 use App\Http\Controllers\SubjectsController;
 use App\Http\Controllers\UsersController;
+use \App\Http\Controllers\StatisticsController;
 use App\Models\Schedule;
 use Illuminate\Support\Facades\Route;
 
@@ -82,4 +82,6 @@ Route::group(['middleware' => 'AuthCheck'], function() {
     Route::post('schedule/delete', [ScheduleController::class, 'delete'])->name('schedule.delete');
 
     Route::get('classmates', [ProfileController::class, 'classmates'])->name('classmates');
+
+    Route::get('statistics', [StatisticsController::class, 'index'])->name('statistic');
 });

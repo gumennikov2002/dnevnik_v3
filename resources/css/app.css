@@ -530,6 +530,17 @@ h1, h2, h3, h4, h5 {
     background: var(--dark-primary);
 }
 
+#statistics .card {
+    width: 200px;
+    height: 120px;
+    margin-bottom: 30px;
+    margin-right: 30px;
+}
+
+#statistics .card-body {
+    align-items: center;
+}
+
 @media screen and (max-width: 1500px) {
     .top-bar h2 {
         margin-left: 60px;
