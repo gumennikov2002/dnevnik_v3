@@ -13,7 +13,7 @@ class Controller extends BaseController
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     public const USER_ID = null;
-    public const USER_INFO = null;
+    public const USER_INFO = [];
 
     public function __construct()
     {
@@ -23,10 +23,4 @@ class Controller extends BaseController
         }
     }
 
-    protected function check_role($role_name) {
-        if ($this->USER_INFO->role === $role_name) {
-            return true;
-        }
-        return false;
-    }
 }

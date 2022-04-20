@@ -40,7 +40,7 @@
             <div class="card table-responsive animate__animated animate__fadeIn" data-day="{{ $i }}">
                 <div class="card-header d-flex justify-content-between pt-3">
                     <h5>{{ $day_of_week }}</h5>
-                    @if ($user_role !== 'Ученик')
+                    @if($user_role === 'Админ' || $user_role === 'Директор' || $user_role === 'Зам. директора')
                         <ion-icon data-bs-toggle="modal" data-day="{{ $i }}" data-bs-target="#addModal" name="add-circle" class="rowAdd text-light" style="cursor: pointer; font-size:24px"></ion-icon>
                     @endif
                 </div>

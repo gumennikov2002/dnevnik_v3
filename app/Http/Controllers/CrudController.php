@@ -18,9 +18,12 @@ class CrudController extends Controller
 
         $init = $this->MODEL_NAME::init_config();
         $this->CONFIG = $init['config'];
-        $this->CONFIG['role'] = $this->USER_INFO->role;
         $this->VALIDATE = $init['validate'];
-        
+
+        if (isset($this->USER_INFO)) {
+            $this->CONFIG['role'] = $this->USER_INFO->role;
+        }
+
         if (isset($init['references'])) {
             $this->REFERENCES = $init['references'];
         }
