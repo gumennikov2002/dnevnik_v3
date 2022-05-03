@@ -21,54 +21,6 @@ h1, h2, h3, h4, h5 {
     font-family: 'ProximaBold';
 }
 
-#preloader {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    z-index: 9999;
-}
-
-.preloader-end {
-    animation: preloader-end 2s;
-    animation-fill-mode: forwards;
-    animation-delay: 0.8s;
-}
-
-#preloader .d-flex {
-    width: 200px;
-    align-items: center;
-}
-
-#preloader .circle1, #preloader .circle2, #preloader .circle3 {
-    background: var(--primary-color);
-    border-radius: 50%;
-    width: 32px;
-    height: 32px;
-    animation: preloader-start 1s;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
-}
-
-@keyframes preloader-start {
-    from {
-        transform: scale(1);
-    }
-    to {
-        transform: scale(1.3);
-        margin-top: -20px;
-    }
-}
-
-@keyframes preloader-end {
-    from {
-
-    }
-    to {
-        z-index: -1;
-        opacity: 0;
-    }
-}
-
 .cp {
     cursor: pointer;
 }
@@ -183,7 +135,7 @@ h1, h2, h3, h4, h5 {
     border-radius: 10px;
     display: none;
     z-index: 999;
-    background: #fff;
+    background: var(--primary-color);
 }
 
 #bottom-sidebar .items {
@@ -230,7 +182,7 @@ h1, h2, h3, h4, h5 {
     position: fixed;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, rgba(75, 64, 170, 0.5) 0%, rgba(195, 0, 255, 0.5) 100%);
+    background: linear-gradient(90deg, var(--active-color) 0%, var(--primary-color) 100%);
     color: #fff;
     backdrop-filter: blur(5px);
 }
@@ -582,14 +534,6 @@ h1, h2, h3, h4, h5 {
     #bottom-sidebar {
         display: block;
     }
-}
-
-@media screen and (max-width: 576px) {
-    #authPage .window {
-        top: 0;
-        position: absolute;
-        height: 100%;
-    }
 
     #bottom-sidebar .items {
         display: none;
@@ -597,5 +541,13 @@ h1, h2, h3, h4, h5 {
 
     #openMenu {
         display: block;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    #authPage .window {
+        top: 0;
+        position: absolute;
+        height: 100%;
     }
 }

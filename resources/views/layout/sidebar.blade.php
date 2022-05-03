@@ -26,7 +26,7 @@
 
 <div id="bottom-sidebar" class="light-shadow">
     <div class="d-flex justify-content-between">
-        <ion-icon name="grid" class="text-primary" id="openMenu"></ion-icon>
+        <ion-icon name="grid" class="text-light" id="openMenu"></ion-icon>
         <div class="items">
 
         </div>

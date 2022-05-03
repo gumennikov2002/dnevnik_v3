@@ -24,7 +24,6 @@ if (typeof urlCurrent.split('?')[1] !== 'undefined') {
 axios.defaults.headers.post['X-CSRF-TOKEN'] = document.querySelector('input[name=_token]').value
 
 theme()
-preloader()
 routeManager()
 
 function routeManager() {
@@ -64,13 +63,6 @@ function theme() {
 
     document.documentElement.style.setProperty('--primary-color', colors.primary)
     document.documentElement.style.setProperty('--active-color', colors.active)
-}
-
-function preloader() {
-    const preloader = document.getElementById('preloader')
-    window.onload = () => {
-        preloader.classList.add('preloader-end')
-    }
 }
 
 function authController() {

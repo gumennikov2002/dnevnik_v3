@@ -13,14 +13,6 @@
 </head>
 
 <body class="{{ $theme === 'dark' ? 'darkTheme' : '' }}">
-
-    <div id="preloader" class="d-flex justify-content-center" style="background: {{ $theme === 'dark' ? '#1e1e1e' : '#f3f3f3' }}">
-        <div class="d-flex justify-content-between">
-            <div class="circle1"></div>
-            <div class="circle2"></div>
-            <div class="circle3"></div>
-        </div>
-    </div>
     @csrf
 
     @if($_SERVER['REQUEST_URI'] !== '/auth')

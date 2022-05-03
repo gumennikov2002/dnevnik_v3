@@ -28,37 +28,30 @@
         }
 
         body {
-            background: #948dcc;
+            background: #fafafa;
         }
 
         img {
-            width: 30%;
+            width: 200px;
         }
 
     </style>
 
-    <center>
-        <div style="
-            z-index: 999;
-            position: absolute;
-            margin: auto;
-            top: 58%;
-            left: 17%;
-            bottom: 0;
-            right: 0;
-        ">
-            <h4 class="text-light">Страница не найдена</h4>
-            <a href="{{ url()->previous() }}" class="btn btn-primary">Назад</a>
+    <div class="container mt-5">
+        <div class="d-flex-justify-content-center">
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6 d-flex justify-content-center flex-column text-center">
+                    <center><img src="/images/logo-b.png"></center>
+                    <h1 class="mt-5">404 | Страница не найдена</h1>
+                    <p>
+                        <a href="{{ url()->previous() }}">Назад</a>
+                    </p>
+                </div>
+                <div class="col-md-3"></div>
+            </div>
         </div>
-        <img src="/images/404.png" style="
-            position: absolute;
-            margin: auto;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            right: 0;"
-        ondragstart="return false;">
-    </center>
+    </div>
 </body>
 
 </html>
